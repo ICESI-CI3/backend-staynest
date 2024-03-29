@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {v4 as uuid} from 'uuid'
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Property } from './entities/property.entity';
@@ -15,19 +16,26 @@ export class PropertyService {
     }
   }
 
-  findAll() {
-    return `This action returns all property`;
+  findAll(): Property[] {
+    return this.properties;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} property`;
+  findOne(id: string): Property {
+    const property: Property = this.properties.find(prop => prop.id === id);
+
+        // si no encuentra el car
+        if (!property) {
+            throw new NotFoundException(`Car with ID ${id} not found`);
+        }
+
+        return property;
   }
 
-  update(id: number, updatePropertyDto: UpdatePropertyDto) {
+  update(id: string, updatePropertyDto: UpdatePropertyDto) {
     return `This action updates a #${id} property`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} property`;
   }
 }
