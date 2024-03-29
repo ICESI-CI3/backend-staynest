@@ -1,9 +1,10 @@
 import { Location } from '../../aux_entities/location.entity';
+import { PropertyType } from '../../enums/propertyType.enum';
 
 // clase Property
 export class Property {
     id: string;
-    name: string;
+    type: PropertyType;
     location: Location;
     rooms: number;
     bathrooms: number;
