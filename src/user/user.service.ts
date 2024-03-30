@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import {v4 as uuid} from 'uuid'
+import {bcrypt} from 'bcrypt'
 
 @Injectable()
 export class UserService {
@@ -25,29 +26,47 @@ export class UserService {
     }
   ];
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const {name} = createUserDto;
-    const brand: User = {
+    
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10)
+    const user: User = {
       name,
       id: uuid(),
       email: createUserDto.email,
-      password: createUserDto.password,
+      password: hashedPassword,
       role: createUserDto.role
      
     }
-    this.users.push(brand)
+    this.users.push(user)
 
-    return brand;
+    return user;
   }
 
   findAll() {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    const user: User = this.users.find(user => user.id === id);
+
+        // si no encuentra el car
+        if (!user) {
+            throw new NotFoundException(`Car with ID ${id} not found`);
+        }
+
+        return user;
   }
 
+  async findByEmail(email: string) {
+    const user: User = this.users.find(user => user.email === email);
+
+    if (!user) {
+        throw new NotFoundException(`User with email ${email} not found`);
+    }
+
+    return user;
+  }
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
