@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import {v4 as uuid} from 'uuid'
-import {bcrypt} from 'bcrypt'
-
+import {v4 as uuid} from 'uuid';
+import * as bcrypt from 'bcrypt';
+import { Role } from 'src/enums/role.enum';
 @Injectable()
 export class UserService {
 
@@ -14,7 +14,7 @@ export class UserService {
       email: 'juan@juan.com',
       password: '1234',
       name: 'Juan',
-      role: 'OWNER'
+      role: Role.OWNER
 
     },
     {
@@ -22,7 +22,7 @@ export class UserService {
       email: 'pablo@pablo.com',
       password: '1234',
       name: 'Pablo',
-      role: 'ADMIN'
+      role: Role.ADMIN 
     }
   ];
 
@@ -35,7 +35,7 @@ export class UserService {
       id: uuid(),
       email: createUserDto.email,
       password: hashedPassword,
-      role: createUserDto.role
+      role: createUserDto.role as Role
      
     }
     this.users.push(user)
