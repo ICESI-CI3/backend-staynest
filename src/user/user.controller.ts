@@ -3,21 +3,27 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { UseGuards } from '@nestjs/common';
 //Now that we have a custom @Roles() decorator, we can use it to decorate any route handler.
 import { Roles } from '../auth/roles.decorator';
 import { Role } from 'src/enums/role.enum';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   @Roles(Role.ADMIN)
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
+  @Roles(Role.OWNER)
   findAll() {
     return this.userService.findAll();
   }
