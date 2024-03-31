@@ -4,6 +4,8 @@ import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './guards/auth.guard';
+import { Role } from 'src/enums/role.enum';
+import { RolesGuard } from './guards/roles.guard';
 
 @Global()
 @Module({
@@ -16,8 +18,8 @@ import { AuthGuard } from './guards/auth.guard';
     }),
 
   ],
-  providers: [AuthService, AuthGuard],
+  providers: [AuthService, AuthGuard, RolesGuard],
   controllers: [AuthController],
-  exports: [AuthService, AuthGuard],
+  exports: [AuthService, AuthGuard, RolesGuard],
 })
 export class AuthModule {}

@@ -14,16 +14,16 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Post()
   @Roles(Role.ADMIN)
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }
 
-  @UseGuards(AuthGuard)
-  @Get()
   @Roles(Role.OWNER)
+  @UseGuards(AuthGuard, RolesGuard)
+  @Get()
   findAll() {
     return this.userService.findAll();
   }

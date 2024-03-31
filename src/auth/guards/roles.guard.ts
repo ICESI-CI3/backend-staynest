@@ -15,7 +15,7 @@ export class RolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     
-    const token = request.body; // `user` here should now be the JWT payload
+    const token = request.user; // `user` here should now be the JWT payload
     console.log('Token:', token);
     console.log(request.user)
     //console.log(request)
