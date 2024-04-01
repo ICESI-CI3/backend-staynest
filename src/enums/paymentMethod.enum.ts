@@ -1,6 +1,4 @@
-export enum PropertyType {
-    Cash = 'CASH',
-    Card = 'CARD',
+export enum PaymentMethod {
+    Credit_card = 'CREDIT CARD',
     Transfer = 'TRANSFER',
-    //should be paypal instead?
   }
