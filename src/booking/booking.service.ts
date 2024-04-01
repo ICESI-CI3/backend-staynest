@@ -43,18 +43,25 @@ export class BookingService {
   }
 
   findAll() {
-    return `This action returns all booking`;
+    return this.bookings;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} booking`;
+  findOne(id: string) {
+    const booking: Booking = this.bookings.find(book => book.id === id);
+
+        // si no encuentra el car
+        if (!booking) {
+            throw new NotFoundException(`Car with ID ${id} not found`);
+        }
+
+        return booking;
   }
 
   update(id: number, updateBookingDto: UpdateBookingDto) {
     return `This action updates a #${id} booking`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} booking`;
   }
 }
