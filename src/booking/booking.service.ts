@@ -51,7 +51,7 @@ export class BookingService {
 
         // si no encuentra el car
         if (!booking) {
-            throw new NotFoundException(`Car with ID ${id} not found`);
+            throw new NotFoundException(`No bookings`);
         }
 
         return booking;
