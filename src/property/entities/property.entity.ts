@@ -4,7 +4,7 @@ import { PropertyType } from '../../enums/propertyType.enum';
 // clase Property
 export class Property {
     id: string;
-    type: PropertyType;
+    type: string;
     location: Location;
     rooms: number;
     bathrooms: number;
