@@ -12,7 +12,7 @@ export class PropertyService {
     {
       id: uuid(),
       type: PropertyType.Apartment,
-      location: new Location(),
+      location: new Location("Estados Unidos", "New Jersey", "Elizabeth AVN #114-20 APT2"),
       rooms: 3,
       bathrooms: 3,
       area: 20,
@@ -22,7 +22,7 @@ export class PropertyService {
     {
       id: uuid(),
       type: PropertyType.Apartment,
-      location: new Location(),
+      location: new Location("Colombia", "Buga", "Calle 2 sur #15A-69"),
       rooms: 5,
       bathrooms: 2,
       area: 35,
@@ -31,11 +31,32 @@ export class PropertyService {
     },
   ]
 
-  create(createPropertyDto: CreatePropertyDto) {
-    try {
-      
-    } catch (error) {
+  create(createPropertyDto: CreatePropertyDto): Property {
+    const property: Property = {
+      id: uuid(),
+      // lo que hace el spread operator es juntar
+      // aquí en este objeto 'car' los atributos
+      // que trae el 'createCar' junto con el id
+      location: new Location(createPropertyDto.country, createPropertyDto.city, createPropertyDto.address),
+      type: this.typeOfProperty(createPropertyDto.type),
+      ...createPropertyDto
+    };
 
+    this.properties.push(property);
+    return property;
+  }
+
+  typeOfProperty(type: string): PropertyType {
+    switch (type) {
+      case "House":
+        return PropertyType.House;
+        break;
+      case "Apartment":
+        return PropertyType.Apartment;
+        break;
+      case "Chalet":
+        return PropertyType.Chalet;
+        break;
     }
   }
 
