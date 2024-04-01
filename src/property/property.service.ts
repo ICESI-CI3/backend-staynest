@@ -12,25 +12,32 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 export class PropertyService {
   private readonly logger = new Logger('ProductsService');
 
-  // inyectamos el repositorio en el servicio
-  constructor(
-    @InjectRepository(Property) 
-    private readonly propertyRepository: Repository<Property>
-  ){
+ /**  create(createPropertyDto: CreatePropertyDto): Property {
+    const property: Property = {
+      id: uuid(),
+      // lo que hace el spread operator es juntar
+      // aquí en este objeto 'car' los atributos
+      // que trae el 'createCar' junto con el id
+      location: new Location(createPropertyDto.country, createPropertyDto.city, createPropertyDto.address),
+      type: this.typeOfProperty(createPropertyDto.type),
+      ...createPropertyDto
+    };
 
-  }
-  
-  // create new property - recibimos DTO
-  // TO DO: Crear una Location cada vez que se agregue !!!
-  async create(createPropertyDto: CreatePropertyDto) {
-    try{
-      const property = this.propertyRepository.create(createPropertyDto);
+    this.properties.push(property);
+    return property;
+  }**/
 
-      await this.propertyRepository.save(property);
-      
-      return property;
-    } catch (error) {
-      this.handleDBExceptions(error);
+  typeOfProperty(type: string): PropertyType {
+    switch (type) {
+      case "House":
+        return PropertyType.House;
+       
+      case "Apartment":
+        return PropertyType.Apartment;
+        
+      case "Chalet":
+        return PropertyType.Chalet;
+       
     }
   }
 

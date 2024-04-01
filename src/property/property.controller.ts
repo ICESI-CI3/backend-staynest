@@ -20,6 +20,9 @@ export class PropertyController {
   @Roles(Role.OWNER)
   @UseGuards(AuthGuard, RolesGuard)
   @Post()
+  /**@Post()
+>>>>>>> f2f799f (create booking)
+>>>>>>> ba80ace (create booking)
   create(@Body() createPropertyDto: CreatePropertyDto) {
     return this.propertyService.create(createPropertyDto);
   }

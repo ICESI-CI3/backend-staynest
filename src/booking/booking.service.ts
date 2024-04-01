@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
+import { User } from '../user/entities/user.entity';
 import { PropertyType } from 'src/enums/propertyType.enum';
 import { PaymentMethod } from 'src/enums/paymentMethod.enum';
 
@@ -18,7 +19,11 @@ export class BookingService {
       property_id: "1",
       user_id: "2",
       num_people: 3,
+<<<<<<< HEAD
       payment_method: PaymentMethod.Credit_card,
+=======
+      payment_method: PaymentMethod.Card,
+>>>>>>> f2f799f (create booking)
       is_paid: true, 
       is_confirmed: true, 
     }
