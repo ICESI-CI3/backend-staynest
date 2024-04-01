@@ -12,7 +12,7 @@ export class BookingController {
     return this.bookingService.create(createBookingDto);
   }
 
-  @Get()
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.bookingService.findOne(String(id));
