@@ -9,9 +9,13 @@ import { ReportsModule } from './reports/reports.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PropertyModule, BookingModule, UserModule, AuthModule, ReportsModule],
+  imports: [PropertyModule, BookingModule, UserModule, AuthModule,
+    ReportsModule, ConfigModule.forRoot({
+      isGlobal: true,
+    })],
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
