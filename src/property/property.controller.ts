@@ -8,10 +8,10 @@ import { Property } from './entities/property.entity';
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
-  @Post()
+  /**@Post()
   create(@Body() createPropertyDto: CreatePropertyDto) {
     return this.propertyService.create(createPropertyDto);
-  }
+  }**/
 
   // find all properties
   @Get()

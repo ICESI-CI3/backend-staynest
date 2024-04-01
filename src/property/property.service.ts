@@ -31,7 +31,7 @@ export class PropertyService {
     },
   ]
 
-  create(createPropertyDto: CreatePropertyDto): Property {
+ /**  create(createPropertyDto: CreatePropertyDto): Property {
     const property: Property = {
       id: uuid(),
       // lo que hace el spread operator es juntar
@@ -44,19 +44,19 @@ export class PropertyService {
 
     this.properties.push(property);
     return property;
-  }
+  }**/
 
   typeOfProperty(type: string): PropertyType {
     switch (type) {
       case "House":
         return PropertyType.House;
-        break;
+       
       case "Apartment":
         return PropertyType.Apartment;
-        break;
+        
       case "Chalet":
         return PropertyType.Chalet;
-        break;
+       
     }
   }
 

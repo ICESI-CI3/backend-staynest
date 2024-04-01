@@ -1,53 +1,35 @@
+import { IsEnum, IsDate, IsString, IsNumber, IsBoolean, IsOptional, IsUUID } from 'class-validator';
+import { PropertyType } from 'src/enums/propertyType.enum';
+import { PaymentMethod } from 'src/enums/paymentMethod.enum';
 
-import { IsNumber, IsString, IsDate, IsBoolean } from "class-validator";
-import { IsPropertyType } from "src/pipes/isPropertyType.pipe";
 
 export class CreateBookingDto {
-    @IsString()
-    readonly booking_id: string;
+  @IsDate()
+  readonly check_in: Date;
 
-    @IsDate()
-    readonly check_in: Date;
+  @IsDate()
+  readonly check_out: Date;
 
-    @IsDate()
-    readonly check_out: Date;
+  @IsEnum(PropertyType)
+  readonly property_type: PropertyType;
 
-    @IsString()
-    readonly property_type: string;
+  @IsString()
+  readonly property_id: string; 
 
-    @IsString()
-    readonly property_id: string
+  @IsUUID()
+  readonly userId: string; 
 
-    @IsString()
-    readonly id: string;
+  @IsNumber()
+  readonly num_people: number;
 
-    @IsString()
-    readonly name: string;
+  @IsEnum(PaymentMethod)
+  readonly payment_method: PaymentMethod;
 
-    @IsString()
-    readonly last_name: string;
+  @IsBoolean()
+  @IsOptional() 
+  readonly is_paid?: boolean;
 
-    @IsString()
-    readonly email: string;
-
-    @IsString()
-    readonly phone_number: string;
-
-    @IsString()
-    readonly address: string;
-
-    @IsNumber()
-    readonly num_people: number;
-
-    @IsNumber()
-    readonly payment_method: number;
-
-    @IsBoolean()
-    readonly is_paid: boolean;  
-
-    @IsBoolean()
-    readonly is_confirmed: boolean; 
-
-   
-
+  @IsBoolean()
+  @IsOptional() 
+  readonly is_confirmed?: boolean;
 }

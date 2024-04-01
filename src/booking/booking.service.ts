@@ -1,11 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {v4 as uuid} from 'uuid';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
+import { Booking } from './entities/booking.entity';
+import { User } from '../user/entities/user.entity';
+import { PropertyType } from 'src/enums/propertyType.enum';
+import { PaymentMethod } from 'src/enums/paymentMethod.enum';
+
+
 
 @Injectable()
 export class BookingService {
-  create(createBookingDto: CreateBookingDto) {
-    return 'This action adds a new booking';
+  private bookings: Booking[] = [
+    {
+      id: uuid(),
+      check_in: new Date(),
+      check_out: new Date(),
+      property_type: PropertyType.Apartment,
+      property_id: "1",
+      user_id: "2",
+      num_people: 3,
+      payment_method: PaymentMethod.Card,
+      is_paid: true, 
+      is_confirmed: true, 
+    }
+  ];
+
+  async create(createBookingDto: CreateBookingDto): Promise<Booking> {
+    const booking : Booking ={
+      id: uuid(),
+      check_in: createBookingDto.check_in,
+      check_out: createBookingDto.check_out,
+      property_type: createBookingDto.property_type,
+      property_id: createBookingDto.property_id,
+      user_id: createBookingDto.userId,
+      num_people: createBookingDto.num_people,
+      payment_method: createBookingDto.payment_method,
+      is_paid: createBookingDto.is_paid,
+      is_confirmed: createBookingDto.is_confirmed,
+    };
+    this.bookings.push(booking);
+    return booking;
   }
 
   findAll() {
@@ -24,3 +59,5 @@ export class BookingService {
     return `This action removes a #${id} booking`;
   }
 }
+
+
