@@ -3,7 +3,6 @@ import {v4 as uuid} from 'uuid';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
-import { User } from '../user/entities/user.entity';
 import { PropertyType } from 'src/enums/propertyType.enum';
 import { PaymentMethod } from 'src/enums/paymentMethod.enum';
 
@@ -20,7 +19,7 @@ export class BookingService {
       property_id: "1",
       user_id: "2",
       num_people: 3,
-      payment_method: PaymentMethod.Card,
+      payment_method: PaymentMethod.Credit_card,
       is_paid: true, 
       is_confirmed: true, 
     }
