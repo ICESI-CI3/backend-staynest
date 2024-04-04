@@ -13,10 +13,15 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PropertyModule, BookingModule, UserModule, AuthModule,
-    ReportsModule, ConfigModule.forRoot({
-      isGlobal: true,
-    })],
+  imports: [
+    ConfigModule.forRoot({
+    isGlobal: true,
+    }),
+    PropertyModule,
+    BookingModule,
+    UserModule,
+    AuthModule,
+    ReportsModule],
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
