@@ -14,9 +14,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard, RolesGuard)
-  @Post()
-  @Roles(Role.ADMIN)
+  @Post('register')
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }
