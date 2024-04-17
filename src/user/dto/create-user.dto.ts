@@ -1,8 +1,10 @@
-import { IsString } from "class-validator";
+import { IsEmail, IsString } from "class-validator";
+import { Role } from "src/enums/role.enum";
 
 export class CreateUserDto {
 
     @IsString()
+    @IsEmail()
     readonly email: string;
 
     @IsString()
@@ -12,6 +14,6 @@ export class CreateUserDto {
     readonly name: string;
 
     @IsString()
-    readonly role: string;
+    readonly role: Role;
 
 }

@@ -1,5 +1,5 @@
 import { SetMetadata } from '@nestjs/common';
-import { Role } from '../enums/role.enum';
+import { Role } from '../../enums/role.enum';
 
 
 //This decorator allows specifying what roles are required to access specific resources.

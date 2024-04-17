@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { access } from 'fs';
 import { Role } from 'src/enums/role.enum'; // Ensure this is the correct path to your Role enum
 
 @Injectable()
@@ -15,13 +14,13 @@ export class RolesGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     
-    const token = request.user; // `user` here should now be the JWT payload
+    const token = request.user; 
     console.log('Token:', token);
     console.log(request.user)
-    //console.log(request)
+    
     if (!token) {
       console.error('Token object is undefined.');
-      return false; // Handle according to your application's needs
+      return false; 
     }
 
 
