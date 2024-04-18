@@ -11,9 +11,9 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
 
 import { ConfigModule } from '@nestjs/config';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -35,12 +35,15 @@ import { User } from './user/entities/user.entity';
     UserModule,
     AuthModule,
     ReportsModule,
+    CommonModule,
     ],
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
   exports: [TypeOrmModule]
 })
+
+
 export class AppModule  {
 
 }
