@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { Location } from './location.entity';
+>>>>>>> 0d0bf0c (feat (property): Add relational entities, endpoints, service and aux entities)
 import { PropertyType } from '../../enums/propertyType.enum';
 import { Role } from "src/enums/role.enum";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
@@ -14,20 +18,10 @@ export class Property {
     })
     type: string;
 
-    @Column('text', {
-        nullable: false,
-    })
-    country: string;
-
-    @Column('text', {
-        nullable: false,
-    })
-    city: string;
-
-    @Column('text', {
-        nullable: false,
-    })
-    address: string;
+    // 
+    @ManyToOne(() => Location)
+    @JoinColumn({ name: 'id' })
+    location: Location;
 
     @Column('number', {
         nullable: false,   
@@ -75,7 +69,11 @@ export class Property {
     @BeforeInsert()
     checkSlug(): void {
         if (!this.slug) {
+<<<<<<< HEAD
             this.slug = `${this.country}-${this.city}-${this.address}`;
+=======
+            this.slug = `${this.location.country}-${this.location.city}-${this.location.address}`;
+>>>>>>> 0d0bf0c (feat (property): Add relational entities, endpoints, service and aux entities)
         }
 
         this.slug = this.slug.toLowerCase();
