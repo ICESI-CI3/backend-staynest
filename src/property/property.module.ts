@@ -10,7 +10,7 @@ import { Property } from './entities/property.entity';
   // ORM para que funcione este modulo
   // y le decimos la entidad a trabajar
   imports: [
-    TypeOrmModule.forFeature([Property]),
+    TypeOrmModule.forFeature([Property, Location]),
   ],
 })
 export class PropertyModule {}

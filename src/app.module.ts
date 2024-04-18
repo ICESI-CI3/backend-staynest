@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { CommonModule } from './common/common.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,6 +37,7 @@ import { CommonModule } from './common/common.module';
     ReportsModule,
     CommonModule,
     ReportsModule],
+
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
