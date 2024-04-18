@@ -1,27 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Query } from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Property } from './entities/property.entity';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
+// TO DO: Return Types !!!
 @Controller('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
+  // create a new property
   @Post()
   create(@Body() createPropertyDto: CreatePropertyDto) {
     return this.propertyService.create(createPropertyDto);
   }
 
   // find all properties
+  // pasamos como parametro el PaginationDto
+  // que indica la cantidad max a mostrar y 
+  // paginacion
   @Get()
-  findAll() {
-    return this.propertyService.findAll();
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.propertyService.findAll(paginationDto);
   }
 
   // find a property with a specific ID
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Property {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertyService.findOne(id);
   }
 
