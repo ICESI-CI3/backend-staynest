@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString, IsOptional, Length } from "class-validator";
 
 export class CreatePropertyDto {
     @IsString()
@@ -26,5 +26,11 @@ export class CreatePropertyDto {
     readonly cost_per_night: number;
 
     @IsNumber()
+    @IsOptional()
     readonly max_people: number;
+
+    @IsString()
+    @IsOptional()
+    @Length(3, 50)
+    readonly slug: string;
 }
