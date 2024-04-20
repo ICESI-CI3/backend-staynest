@@ -7,6 +7,8 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'src/enums/role.enum';
+import { Property } from './entities/property.entity';
+
 
 // TO DO: Return Types !!!
 @Controller('property')
