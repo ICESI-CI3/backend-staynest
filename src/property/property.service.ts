@@ -19,9 +19,7 @@ export class PropertyService {
   ){
 
   }
-
-
-
+  
   // create new property - recibimos DTO
   // TO DO: Crear una Location cada vez que se agregue !!!
   async create(createPropertyDto: CreatePropertyDto) {
