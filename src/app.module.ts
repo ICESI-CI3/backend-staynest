@@ -20,6 +20,7 @@ import { CommonModule } from './common/common.module';
     ConfigModule.forRoot({
     isGlobal: true,
     }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -30,6 +31,7 @@ import { CommonModule } from './common/common.module';
       synchronize: true, 
       autoLoadEntities: true,
     }),
+
     PropertyModule,
     BookingModule,
     UserModule,
