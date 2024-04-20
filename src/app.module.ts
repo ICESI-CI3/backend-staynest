@@ -27,7 +27,7 @@ import { CommonModule } from './common/common.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      synchronize: true,  // Be cautious with this in production
+      synchronize: true, 
       autoLoadEntities: true,
     }),
     PropertyModule,
