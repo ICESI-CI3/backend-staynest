@@ -1,7 +1,7 @@
 import { Global, Module, forwardRef } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
@@ -24,8 +24,8 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     }),
 
   ],
-  providers: [AuthService, AuthGuard, RolesGuard, JwtStrategy],
+  providers: [AuthService, AuthGuard, RolesGuard, JwtStrategy, JwtService],
   controllers: [AuthController],
-  exports: [AuthService, AuthGuard, RolesGuard, JwtModule],
+  exports: [AuthService, AuthGuard, RolesGuard, JwtModule, JwtService],
 })
 export class AuthModule {}

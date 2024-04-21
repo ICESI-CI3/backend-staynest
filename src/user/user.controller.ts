@@ -7,8 +7,8 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
 //Now that we have a custom @Roles() decorator, we can use it to decorate any route handler.
 import { Roles } from '../auth/decorators/roles.decorator';
-import { Role } from 'src/enums/role.enum';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role } from '../enums/role.enum';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('user')
 export class UserController {
@@ -33,11 +33,11 @@ export class UserController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 }
