@@ -15,6 +15,7 @@ import { Property } from './entities/property.entity';
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
+  /**@Post()
   // create a new property
   @Roles(Role.OWNER)
   @UseGuards(AuthGuard, RolesGuard)
@@ -52,5 +53,5 @@ export class PropertyController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertyService.remove(id);
-  }
+  }**/
 }
