@@ -1,5 +1,5 @@
 import { User } from './entities/user.entity';
-import { Role } from 'src/enums/role.enum';
+import { Role } from '../enums/role.enum';
 
 describe('User Entity', () => {
     let user: User;

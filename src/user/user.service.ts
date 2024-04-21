@@ -59,18 +59,19 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userRepository.find();
   }
 
-  findOne(id: string) {
-    const user: User = this.users.find(user => user.id === id);
+  async findOne(id: string) {
+    const user: User = await this.userRepository.findOne({
+      where: { id }
+    });
 
-        // si no encuentra el car
-        if (!user) {
-            throw new NotFoundException(`Car with ID ${id} not found`);
-        }
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
 
-        return user;
+    return user;
   }
 
   async findByEmail(email: string) {
@@ -85,12 +86,28 @@ export class UserService {
 
     return user;
   }
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+
+    const user = await this.userRepository.preload({
+      id: id,
+      ...updateUserDto
+    });
+
+    if ( !user ) throw new NotFoundException(`User with id: ${ id } not found`);
+
+    try {
+      await this.userRepository.save( user );
+      return user;
+      
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+   
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    const user = await this.findOne( id );
+    await this.userRepository.delete(id);
   }
   private handleDBErrors( error: any ): never {
 
