@@ -28,6 +28,6 @@ import { config } from 'dotenv';
   ],
   providers: [AuthService, AuthGuard, RolesGuard, JwtStrategy, JwtService],
   controllers: [AuthController],
-  exports: [AuthService, AuthGuard, RolesGuard, JwtModule],
+  exports: [AuthService, AuthGuard, RolesGuard, JwtModule, JwtService],
 })
 export class AuthModule {}
