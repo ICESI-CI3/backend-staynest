@@ -43,17 +43,14 @@ export class UserService {
       
       const user = this.userRepository.create({
         ...userData,
-        password: bcrypt.hashSync( password, 10 ),
+        password: bcrypt.hashSync(password, 10),
       });
 
       await this.userRepository.save( user )
-      delete user.password;
+      
 
-      return {
-        ...user,
-        token: this.jwtService.sign({ id: user.id })
-      };
-      // TODO: Retornar el JWT de acceso
+      return user;
+      
 
     } catch (error) {
       this.handleDBErrors(error);
@@ -77,7 +74,10 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    const user: User = this.users.find(user => user.email === email);
+
+    const user: User = await this.userRepository.findOne({
+      where: { email }
+    });
 
     if (!user) {
         throw new NotFoundException(`User with email ${email} not found`);
