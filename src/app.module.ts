@@ -19,6 +19,7 @@ import { User } from './user/entities/user.entity';
   imports: [
     ConfigModule.forRoot({
     isGlobal: true,
+
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -29,6 +30,8 @@ import { User } from './user/entities/user.entity';
       database: process.env.DB_NAME,  
       autoLoadEntities: true,
       ssl: true,
+      logging: true,
+      logger: 'advanced-console'
       
     }),
     PropertyModule,
