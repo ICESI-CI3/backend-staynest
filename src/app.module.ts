@@ -11,14 +11,7 @@ import { RolesGuard } from './auth/guards/roles.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
 
 import { ConfigModule } from '@nestjs/config';
-<<<<<<< HEAD
 
-@Module({
-  imports: [PropertyModule, BookingModule, UserModule, AuthModule,
-    ReportsModule, ConfigModule.forRoot({
-      isGlobal: true,
-    })],
-=======
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 
@@ -43,7 +36,6 @@ import { User } from './user/entities/user.entity';
     AuthModule,
     ReportsModule,
     ],
->>>>>>> management
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
