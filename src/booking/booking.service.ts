@@ -48,8 +48,6 @@ export class BookingService {
 
   findOne(id: string) {
     const booking: Booking = this.bookings.find(book => book.id === id);
-
-        // si no encuentra el car
         if (!booking) {
             throw new NotFoundException(`No bookings`);
         }
@@ -57,13 +55,30 @@ export class BookingService {
         return booking;
   }
 
-  update(id: number, updateBookingDto: UpdateBookingDto) {
-    return `This action updates a #${id} booking`;
+  update(id: string, updateBookingDto: UpdateBookingDto): Booking {
+    const bookingIndex = this.bookings.findIndex((book) => book.id === id);
+    if (bookingIndex === -1) {
+      throw new NotFoundException(`Booking with ID "${id}" not found.`);
+    }
+  
+    const updatedBooking = { ...this.bookings[bookingIndex], ...updateBookingDto };
+    this.bookings[bookingIndex] = updatedBooking;
+    return updatedBooking;
   }
+  
 
-  remove(id: string) {
-    return `This action removes a #${id} booking`;
+  remove(id: string): { message: string } {
+    const bookingIndex = this.bookings.findIndex((book) => book.id === id);
+    if (bookingIndex === -1) {
+      throw new NotFoundException(`Booking with ID "${id}" not found.`);
+    }
+  
+    this.bookings.splice(bookingIndex, 1);
+  
+    return { message: `Booking with ID "${id}" has been removed.` };
   }
+  
+  
 }
 
 
