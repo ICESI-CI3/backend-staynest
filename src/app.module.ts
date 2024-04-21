@@ -46,5 +46,5 @@ import { User } from './user/entities/user.entity';
   exports: [TypeOrmModule]
 })
 export class AppModule  {
-
+  
 }
