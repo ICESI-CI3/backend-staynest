@@ -4,7 +4,7 @@ import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Property } from './entities/property.entity';
 import { Location } from '../aux_entities/location.entity';
-import { PropertyType } from 'src/enums/propertyType.enum';
+import { PropertyType } from '../enums/propertyType.enum';
 
 @Injectable()
 export class PropertyService {
