@@ -63,5 +63,5 @@ export class Property {
         nullable: false,   
     })
     max_people: number; // max gente que puede alojar
-  bookings: any;
+
 }
