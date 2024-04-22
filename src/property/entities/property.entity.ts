@@ -31,37 +31,37 @@ export class Property {
     })
     address: string;
 
-    @Column('number', {
-        nullable: false,   
+    @Column('numeric', {
+        nullable: true,   
     })
     latitude: number;
 
-    @Column('number', {
-        nullable: false,   
+    @Column('numeric', {
+        nullable: true,   
     })
     altitude: number;
     
-    @Column('number', {
+    @Column('numeric', {
         nullable: false,   
     })
     rooms: number;
     
-    @Column('number', {
+    @Column('numeric', {
         nullable: false,   
     })
     bathrooms: number;
     
-    @Column('number', {
+    @Column('numeric', {
         nullable: false,   
     })
     area: number;
     
-    @Column('number', {
+    @Column('numeric', {
         nullable: false,   
     })
     cost_per_night: number; // costo por noche
     
-    @Column('number', {
+    @Column('numeric', {
         nullable: false,   
     })
     max_people: number; // max gente que puede alojar

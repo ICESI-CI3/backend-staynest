@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Property } from './entities/property.entity';
@@ -12,32 +11,25 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 export class PropertyService {
   private readonly logger = new Logger('ProductsService');
 
- /**  create(createPropertyDto: CreatePropertyDto): Property {
-    const property: Property = {
-      id: uuid(),
-      // lo que hace el spread operator es juntar
-      // aquí en este objeto 'car' los atributos
-      // que trae el 'createCar' junto con el id
-      location: new Location(createPropertyDto.country, createPropertyDto.city, createPropertyDto.address),
-      type: this.typeOfProperty(createPropertyDto.type),
-      ...createPropertyDto
-    };
+  // inyectamos el repositorio en el servicio
+  constructor(
+    @InjectRepository(Property) 
+    private readonly propertyRepository: Repository<Property>
+  ){
 
-    this.properties.push(property);
-    return property;
-  }**/
+  }
+  
+  // create new property - recibimos DTO
+  // TO DO: Crear una Location cada vez que se agregue !!!
+  async create(createPropertyDto: CreatePropertyDto) {
+    try{
+      const property = this.propertyRepository.create(createPropertyDto);
 
-  typeOfProperty(type: string): PropertyType {
-    switch (type) {
-      case "House":
-        return PropertyType.House;
-       
-      case "Apartment":
-        return PropertyType.Apartment;
-        
-      case "Chalet":
-        return PropertyType.Chalet;
-       
+      await this.propertyRepository.save(property);
+      
+      return property;
+    } catch (error) {
+      this.handleDBExceptions(error);
     }
   }
 
@@ -102,6 +94,7 @@ export class PropertyService {
   async remove(id: string) {
     const property = await this.findOne( id );
     await this.propertyRepository.remove( property );
+    return { message: `Property with ID "${id}" has been removed.` };
   }
 
   // manejamos la excepciones de la base de datos
