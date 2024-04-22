@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { ReportModule } from './report/report.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -40,7 +41,7 @@ import { ReportModule } from './report/report.module';
 
 =======
     ReportModule,
-    ReportModule,
+    ReportModule,SeedModule
     ],
 >>>>>>> 8a24a9c (add report structure)
   controllers: [AppController],
