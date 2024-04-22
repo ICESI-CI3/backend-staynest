@@ -2,11 +2,18 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role } from 'src/enums/role.enum';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { UseGuards } from '@nestjs/common';
 
 @Controller('booking')
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
+  @Roles(Role.USER)
+  //@UseGuards(AuthGuard, RolesGuard)
   @Post()
   create(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingService.create(createBookingDto);

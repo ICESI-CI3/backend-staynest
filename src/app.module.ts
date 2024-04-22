@@ -37,8 +37,7 @@ import { CommonModule } from './common/common.module';
     UserModule,
     AuthModule,
     ReportsModule,
-    CommonModule,
-    ReportsModule],
+    CommonModule],
 
   controllers: [AppController],
   providers: [AppService, 
