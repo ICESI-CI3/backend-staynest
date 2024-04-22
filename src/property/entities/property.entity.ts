@@ -63,21 +63,5 @@ export class Property {
         nullable: false,   
     })
     max_people: number; // max gente que puede alojar
-
-    // El SLUG LO QUE HACE ES "CAMUFLAR" U OCULTAR METADATOS DE LOS DATOS COMO POR EJEMPLO EL ID EN LA URL !!!!
-    // ARMAMOS UNA EQUIVALENCIA, UN MAPEO CON EL SLUG (palabra o palabras camufladas) CON EL ENDPOINT REAL
-    @Column('text', 
-            {unique: true})
-    slug: string; 
-
-    // before insert hacemos un refactor
-    // al slug
-    @BeforeInsert()
-    checkSlug(): void {
-        if (!this.slug) {
-            this.slug = `${this.country}-${this.city}-${this.address}`;
-        }
-
-        this.slug = this.slug.toLowerCase();
-    }
+  bookings: any;
 }
