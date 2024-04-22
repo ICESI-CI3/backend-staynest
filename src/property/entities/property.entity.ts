@@ -11,5 +11,5 @@ export class Property {
     area: number;
     cost_per_night: number; // costo por noche
     max_people: number; // max gente que puede alojar
-  bookings: any;
+
 }
