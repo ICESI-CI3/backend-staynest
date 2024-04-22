@@ -1,5 +1,3 @@
-
-
 import { PropertyType } from '../../enums/propertyType.enum';
 import { Role } from "src/enums/role.enum";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
@@ -32,12 +30,12 @@ export class Property {
     address: string;
 
     @Column('numeric', {
-        nullable: true,   
+        nullable: false,   
     })
     latitude: number;
 
     @Column('numeric', {
-        nullable: true,   
+        nullable: false,   
     })
     altitude: number;
     
@@ -77,7 +75,6 @@ export class Property {
     @BeforeInsert()
     checkSlug(): void {
         if (!this.slug) {
-            this.slug = `${this.country}-${this.city}-${this.address}`;
             this.slug = `${this.country}-${this.city}-${this.address}`;
         }
 

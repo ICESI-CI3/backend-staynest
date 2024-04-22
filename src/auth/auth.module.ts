@@ -6,11 +6,8 @@ import { AuthController } from './auth.controller';
 import { AuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-<<<<<<< HEAD
 import { JwtStrategy } from './strategies/jwt.strategy';
-=======
 import { config } from 'dotenv';
->>>>>>> b7e0cea (Add async register for the jwt import module)
 
 @Global()
 @Module({

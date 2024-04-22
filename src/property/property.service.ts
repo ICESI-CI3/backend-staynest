@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Property } from './entities/property.entity';
@@ -94,7 +95,6 @@ export class PropertyService {
   async remove(id: string) {
     const property = await this.findOne( id );
     await this.propertyRepository.remove( property );
-    return { message: `Property with ID "${id}" has been removed.` };
   }
 
   // manejamos la excepciones de la base de datos
