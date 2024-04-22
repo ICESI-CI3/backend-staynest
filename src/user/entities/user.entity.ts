@@ -3,6 +3,7 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGenerated
 
 @Entity('Users')
 export class User {
+    [x: string]: any;
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -15,9 +16,6 @@ export class User {
 
     @Column('text', { nullable: false })
     name: string;
-
-    @Column('text', { nullable: false })
-    role: Role;
 
     @BeforeInsert()
     checkFieldsBeforeInsert() {
