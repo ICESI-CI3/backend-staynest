@@ -15,6 +15,7 @@ import { Property } from './entities/property.entity';
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
+<<<<<<< HEAD
   /**@Post()
   // create a new property
   @Roles(Role.OWNER)
@@ -22,7 +23,15 @@ export class PropertyController {
   @Post()
   /**@Post()
 >>>>>>> f2f799f (create booking)
+<<<<<<< HEAD
 >>>>>>> ba80ace (create booking)
+=======
+=======
+  // create a new property
+  @Roles(Role.OWNER)
+  @Post()
+>>>>>>> 62bcc45 (sin guard)
+>>>>>>> 5c0dde9 (ayuda)
   create(@Body() createPropertyDto: CreatePropertyDto) {
     return this.propertyService.create(createPropertyDto);
   }
@@ -31,30 +40,35 @@ export class PropertyController {
   // pasamos como parametro el PaginationDto
   // que indica la cantidad max a mostrar y 
   // paginacion
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
     return this.propertyService.findAll(paginationDto);
   }
 
   // find a property with a specific ID
-  @UseGuards(AuthGuard)
+  //@UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertyService.findOne(id);
   }
 
   @Roles(Role.OWNER)
-  @UseGuards(AuthGuard, RolesGuard)
+  //@UseGuards(AuthGuard, RolesGuard)
   @Patch(':id')
   update(@Param('id', ParseUUIDPipe) id: string, @Body() updatePropertyDto: UpdatePropertyDto) {
     return this.propertyService.update(id, updatePropertyDto);
   }
 
   @Roles(Role.OWNER)
-  @UseGuards(AuthGuard, RolesGuard)
+  //@UseGuards(AuthGuard, RolesGuard)
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertyService.remove(id);
+<<<<<<< HEAD
   }**/
 }
+=======
+  }
+}
+>>>>>>> 5c0dde9 (ayuda)
