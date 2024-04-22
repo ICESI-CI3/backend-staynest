@@ -15,7 +15,7 @@ export class PropertyController {
 
   // create a new property
   @Roles(Role.OWNER)
-  @UseGuards(AuthGuard, RolesGuard)
+  //@UseGuards(AuthGuard, RolesGuard)
   @Post()
   create(@Body() createPropertyDto: CreatePropertyDto) {
     return this.propertyService.create(createPropertyDto);

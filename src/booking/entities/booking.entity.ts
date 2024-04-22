@@ -1,5 +1,5 @@
 import { PropertyType } from '../../enums/propertyType.enum';
-import { PaymentMethod } from 'src/enums/paymentMethod.enum';
+import { PaymentMethod } from '../../enums/paymentMethod.enum';
 
 export class Booking {
     id: string;
