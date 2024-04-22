@@ -5,7 +5,6 @@ import { PropertyModule } from './property/property.module';
 import { BookingModule } from './booking/booking.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ReportsModule } from './reports/reports.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
@@ -13,6 +12,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { ReportModule } from './report/report.module';
 
 @Module({
   imports: [
@@ -33,7 +33,8 @@ import { User } from './user/entities/user.entity';
     BookingModule,
     UserModule,
     AuthModule,
-    ReportsModule,
+    ReportModule,
+    ReportModule,
     ],
   controllers: [AppController],
   providers: [AppService, 
