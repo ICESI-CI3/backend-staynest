@@ -7,16 +7,6 @@ import { UpdateReportDto } from './dto/update-report.dto';
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
-  @Post()
-  create(@Body() createReportDto: CreateReportDto) {
-    return this.reportService.create(createReportDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.reportService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.reportService.findOne(+id);
