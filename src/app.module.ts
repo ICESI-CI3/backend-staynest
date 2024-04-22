@@ -29,7 +29,9 @@ import { User } from './user/entities/user.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,  
       autoLoadEntities: true,
-      ssl: true,
+      ssl: {
+        rejectUnauthorized: false // This is generally not recommended for production unless you fully trust the network and the database.
+      },
       logging: true,
       logger: 'advanced-console'
       
