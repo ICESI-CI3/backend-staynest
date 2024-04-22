@@ -45,8 +45,8 @@ import { CommonModule } from './common/common.module';
     UserModule,
     AuthModule,
     ReportModule,
-    CommonModule,SeedModule
-    ],
+    ReportModule,SeedModule,
+  ],
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],

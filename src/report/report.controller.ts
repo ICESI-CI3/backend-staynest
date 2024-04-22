@@ -15,6 +15,10 @@ export class ReportController {
     return this.reportService.generateOccupancyReport();
   }
 
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateReportDto: UpdateReportDto) {
+    return this.reportService.update(+id, updateReportDto);
+  }
 
   @Get('financial')
   generateFinancialReport() {
