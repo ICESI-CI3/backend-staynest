@@ -20,12 +20,7 @@ services:
     ports:
       - "5050:80"
     environment:
-<<<<<<< HEAD
       PGADMIN_DEFAULT_EMAIL: juan@juan.com
       PGADMIN_DEFAULT_PASSWORD: hola1234
-=======
-      PGADMIN_DEFAULT_EMAIL: dylan@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 12345
->>>>>>> 6d0fc18 (docker ready)
     volumes:
       - ./pgadmin-data:/var/lib/pgadmin

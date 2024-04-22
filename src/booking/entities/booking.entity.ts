@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-export class Booking {}
-=======
 import { PropertyType } from '../../enums/propertyType.enum';
 import { PaymentMethod } from 'src/enums/paymentMethod.enum';
 
@@ -16,5 +13,3 @@ export class Booking {
     is_paid: boolean; 
     is_confirmed: boolean; 
 }
-
->>>>>>> 5c0dde9 (ayuda)

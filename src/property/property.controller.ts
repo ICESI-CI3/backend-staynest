@@ -7,31 +7,16 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Role } from 'src/enums/role.enum';
-import { Property } from './entities/property.entity';
-
 
 // TO DO: Return Types !!!
 @Controller('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
-<<<<<<< HEAD
-  /**@Post()
   // create a new property
   @Roles(Role.OWNER)
-  @UseGuards(AuthGuard, RolesGuard)
+  //@UseGuards(AuthGuard, RolesGuard)
   @Post()
-  /**@Post()
->>>>>>> f2f799f (create booking)
-<<<<<<< HEAD
->>>>>>> ba80ace (create booking)
-=======
-=======
-  // create a new property
-  @Roles(Role.OWNER)
-  @Post()
->>>>>>> 62bcc45 (sin guard)
->>>>>>> 5c0dde9 (ayuda)
   create(@Body() createPropertyDto: CreatePropertyDto) {
     return this.propertyService.create(createPropertyDto);
   }
@@ -65,10 +50,5 @@ export class PropertyController {
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertyService.remove(id);
-<<<<<<< HEAD
-  }**/
-}
-=======
   }
 }
->>>>>>> 5c0dde9 (ayuda)
