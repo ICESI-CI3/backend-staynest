@@ -15,6 +15,7 @@ import { config } from 'dotenv';
     forwardRef(() => UserModule),
     JwtModule.registerAsync({
       imports: [ConfigModule],
+      
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: '500s' },
