@@ -12,7 +12,30 @@ export class SeedService {
   populateDB() {
     this.userService.populateWithSeedData(userSeed);
     
-    return 'Database seeded';
+    return ` Database seeded
+                .  .
+          |\_|\
+          | a_a\
+          | | "]
+      ____| '-\___
+     /.----.___.-'\
+    //        _    \
+   //   .-. (~v~) /|
+  |'|  /\:  .--  / \
+ // |-/  \_/____/\/~|
+|/  \ |  []_|_|_] \ |
+| \  | \ |___   _\ ]_}
+| |  '-' /   '.'  |
+| |     /    /|:  | 
+| |     |   / |:  /\
+| |     /  /  |  /  \
+| |    |  /  /  |    \
+\ |    |/\/  |/|/\    \
+ \|\ |\|  |  | / /\/\__\
+  \ \| | /   | |__
+       / |   |____)
+       |_/
+              `;
   }
 
 }

@@ -4,8 +4,10 @@ import { Repository } from 'typeorm';
 import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { isUUID } from 'class-validator';
+import { PropertyType } from '../enums/propertyType.enum';
+import { PaymentMethod } from '../enums/paymentMethod.enum';
+
+
 
 @Injectable()
 export class BookingService {
