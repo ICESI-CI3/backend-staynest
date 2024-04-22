@@ -9,7 +9,7 @@ describe('PropertyController', () => {
 
   let properties = [
     {
-      id: 1,
+      id: 'a1',
       type: PropertyType.House,
       country: 'USA',
       city: 'New York',
@@ -24,7 +24,7 @@ describe('PropertyController', () => {
       slug: 'usa-new-york-123-main-st'
   },
   {
-      id: 2,
+      id: 'a2',
       type: PropertyType.Apartment,
       country: 'Canada',
       city: 'Toronto',
@@ -39,7 +39,7 @@ describe('PropertyController', () => {
       slug: 'canada-toronto-456-queen-st'
   },
   {
-      id: 3,
+      id: 'a3',
       type: PropertyType.Chalet,
       country: 'Spain',
       city: 'Barcelona',
@@ -60,27 +60,31 @@ describe('PropertyController', () => {
     // create property
     create: jest.fn( (propertyDto) => 
     ({
-      id: Math.floor(Math.random() * 100),
+      id: 'a' + Math.floor(Math.random() * 100),
       ...propertyDto
     }) ),
 
     // get properties
-    getAll: jest.fn( () => 
+    findAll: jest.fn( () => 
     ({
       properties
     })),
 
     // get property (slug o ID)
-    getOne: jest.fn( (term) => {
-      if (typeof term === 'number') {
-          // Buscar por ID
-          return properties.find(property => property.id === term);
-      } else if (typeof term === 'string') {
-          // Buscar por slug
-          return properties.find(property => property.slug === term);
-      } else {
+    findOne: jest.fn( (term) => {
+      const byID = properties.find(property => property.id === term);
+  
+      if (!byID) {
+        const bySlug = properties.find(property => property.slug === term);
+
+        if (!bySlug) {
+          return bySlug;
+        } else {
           // Tipo de term no válido
-          throw new Error('Tipo de term no válido');
+          return "Not found";
+        }
+      } else {
+        return byID;
       }
     }),
 
@@ -127,7 +131,7 @@ describe('PropertyController', () => {
     };
 
     expect(controller.create(dto)).toEqual({
-      id: expect.any(Number),
+      id: expect.any(String),
       type: PropertyType.Chalet,
       country: 'Colombia',
       city: 'Buga',
@@ -144,5 +148,35 @@ describe('PropertyController', () => {
 
     expect(mockPropertyService.create).toHaveBeenCalledWith(dto);
     expect(mockPropertyService.create).toHaveBeenCalledTimes(1);
+  });
+
+  // get a property
+  it('should get a property', () => {
+    expect(controller.findOne('colombia-buga-calle-2-sur-#15a-69')).toEqual({
+      id: expect.any(String),
+      type: PropertyType.Chalet,
+      country: 'Colombia',
+      city: 'Buga',
+      address: 'Calle 2 sur #15A-69',
+      latitude: 30.41,
+      altitude: 132.145,
+      rooms: 2,
+      bathrooms: 1,
+      area: 50,
+      cost_per_night: 20,
+      max_people: 4,
+      slug: 'colombia-buga-calle-2-sur-#15a-69'
+    });
+
+    expect(mockPropertyService.findOne).toHaveBeenCalledWith('colombia-buga-calle-2-sur-#15a-69');
+    expect(mockPropertyService.findOne).toHaveBeenCalledTimes(1);
+  });
+
+  // get all properties
+  it('should get all properties', () => {
+    // expect(controller.findAll()).toEqual();
+
+    expect(mockPropertyService.findOne).toHaveBeenCalledWith('colombia-buga-calle-2-sur-#15a-69');
+    expect(mockPropertyService.findOne).toHaveBeenCalledTimes(1);
   });
 });
