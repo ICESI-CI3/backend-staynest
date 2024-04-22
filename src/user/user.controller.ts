@@ -19,13 +19,14 @@ export class UserController {
     return await this.userService.create(createUserDto);
   }
 
-  @Roles(Role.OWNER)
-  @UseGuards(AuthGuard, RolesGuard)
+  
   @Get()
   findAll() {
     return this.userService.findAll();
   }
-
+  
+  @Roles(Role.OWNER)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);

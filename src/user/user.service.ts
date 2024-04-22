@@ -108,6 +108,14 @@ export class UserService {
     const user = await this.findOne( id );
     await this.userRepository.delete(id);
   }
+
+  async populateWithSeedData(users: User[]) {
+    try {
+      await this.userRepository.save(users);
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
+  }
   private handleDBErrors( error: any ): never {
 
 

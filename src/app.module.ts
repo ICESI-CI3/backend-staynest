@@ -13,6 +13,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
 import { ReportModule } from './report/report.module';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { ReportModule } from './report/report.module';
     UserModule,
     AuthModule,
     ReportModule,
-    ReportModule,
+    ReportModule,SeedModule
     ],
   controllers: [AppController],
   providers: [AppService, 
