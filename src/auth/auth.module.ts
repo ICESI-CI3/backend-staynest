@@ -7,25 +7,25 @@ import { AuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { config } from 'dotenv';
 
 @Global()
 @Module({
   imports: [
     forwardRef(() => UserModule),
     JwtModule.registerAsync({
-
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: async (configService: ConfigService) => ({
-          secret: configService.get<string>('JWT_SECRET'),
-          signOptions: { expiresIn: '6h' },
-        }),
-        
+      imports: [ConfigModule],
+      
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '500s' },
+      }),
+      inject: [ConfigService],
     }),
 
   ],
-  providers: [AuthService, AuthGuard, RolesGuard, JwtStrategy, JwtService],
+  providers: [AuthService, AuthGuard, RolesGuard, JwtStrategy],
   controllers: [AuthController],
-  exports: [AuthService, AuthGuard, RolesGuard, JwtModule, JwtService],
+  exports: [AuthService, AuthGuard, RolesGuard, JwtModule],
 })
 export class AuthModule {}
