@@ -111,7 +111,13 @@ export class UserService {
 
   async populateWithSeedData(users: User[]) {
     try {
-      await this.userRepository.save(users);
+      const crypPasswordUers = users.map(user => {
+        return {
+          ...user,
+          password: bcrypt.hashSync(user.password, 10)
+        }
+      })
+      await this.userRepository.save(crypPasswordUers);
     } catch (error) {
       this.handleDBErrors(error);
     }
