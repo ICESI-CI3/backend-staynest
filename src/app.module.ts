@@ -15,6 +15,7 @@ import { ReportModule } from './report/report.module';
 import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,10 +37,10 @@ import { CommonModule } from './common/common.module';
     BookingModule,
     UserModule,
     AuthModule,
+
     ReportModule,
     CommonModule,SeedModule
     ],
-
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
