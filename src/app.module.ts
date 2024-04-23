@@ -37,7 +37,6 @@ import { CommonModule } from './common/common.module';
     BookingModule,
     UserModule,
     AuthModule,
-
     ReportModule,
     CommonModule,SeedModule
     ],
