@@ -3,9 +3,9 @@ import { ReportService } from './report.service';
 import { ReportController } from './report.controller';
 import { Type } from 'class-transformer';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/user/entities/user.entity';
-import { Property } from 'src/property/entities/property.entity';
-import { Booking } from 'src/booking/entities/booking.entity';
+import { User } from '../user/entities/user.entity';
+import { Property } from '../property/entities/property.entity';
+import { Booking } from '../booking/entities/booking.entity';
 
 @Module({
   controllers: [ReportController],

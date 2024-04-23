@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { userSeed } from './data/user.seed';
-import { BookingService } from 'src/booking/booking.service';
-import { PropertyService } from 'src/property/property.service';
+import { BookingService } from '../booking/booking.service';
+import { PropertyService } from '../property/property.service';
 import { propertySeed } from './data/property.seed';
 import { bookingSeed } from './data/booking.seed';
 

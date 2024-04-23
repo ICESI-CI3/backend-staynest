@@ -1,4 +1,4 @@
-import { User } from "src/user/entities/user.entity";
+import { User } from "../../user/entities/user.entity";
 import { Role } from "../../enums/role.enum"
 import  {v4 as uuid} from 'uuid';
 
