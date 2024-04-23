@@ -4,6 +4,7 @@ import { PaymentMethod } from "../../enums/paymentMethod.enum";
 import { v4 as uuid } from 'uuid';
 import { User } from "src/user/entities/user.entity";
 import { userSeed } from "./user.seed";
+import { propertySeed } from "./property.seed";
 
 export const bookingSeed: Booking[] = [
     {
