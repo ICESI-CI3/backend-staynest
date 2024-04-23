@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateReportDto } from './dto/create-report.dto';
-import { UpdateReportDto } from './dto/update-report.dto';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from '../booking/entities/booking.entity';
 import { Property } from '../property/entities/property.entity';
@@ -100,9 +99,7 @@ export class ReportService {
     return `This action returns a #${id} report`;
   }
 
-  update(id: number, updateReportDto: UpdateReportDto) {
-    return `This action updates a #${id} report`;
-  }
+
 
   remove(id: number) {
     return `This action removes a #${id} report`;
