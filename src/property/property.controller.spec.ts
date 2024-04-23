@@ -5,7 +5,7 @@ import { Property } from './entities/property.entity';
 import { PropertyType } from '../enums/propertyType.enum';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthModule } from '../auth/auth.module';
-import { AppModule } from 'src/app.module';
+import { AppModule } from '../app.module';
 
 describe('PropertyController', () => {
   let controller: PropertyController;
