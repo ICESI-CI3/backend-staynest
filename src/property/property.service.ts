@@ -35,15 +35,9 @@ export class PropertyService {
   }
 
   // find all - recibimos pagination por parametro
-  async findAll( paginationDto: PaginationDto ) {
-
-    const { limit = 10, offset = 0 } = paginationDto;
-
-    // find usando take and skip tomados de pagination
-    return await this.propertyRepository.find({
-      take: limit,
-      skip: offset,
-    })
+  async findAll( ) {
+    // find 
+    return await this.propertyRepository.find();
   }
 
   // find one :  puede buscar por cualquiera de las dos propiedades

@@ -3,6 +3,9 @@ import { PropertyController } from './property.controller';
 import { PropertyService } from './property.service';
 import { Property } from './entities/property.entity';
 import { PropertyType } from '../enums/propertyType.enum';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AuthModule } from '../auth/auth.module';
+import { AppModule } from 'src/app.module';
 
 describe('PropertyController', () => {
   let controller: PropertyController;
@@ -102,6 +105,7 @@ describe('PropertyController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PropertyController],
       providers: [PropertyService],
+      imports: [AuthModule, AppModule],
     }).overrideProvider(PropertyService)
     .useValue(mockPropertyService)
     .compile();;
@@ -173,10 +177,73 @@ describe('PropertyController', () => {
   });
 
   // get all properties
-  it('should get all properties', () => {
-    // expect(controller.findAll()).toEqual();
+  it('should get all properties', () => {  
+    const propertiesExp = [
+      {
+        id: 'a1',
+        type: PropertyType.House,
+        country: 'USA',
+        city: 'New York',
+        address: '123 Main St',
+        latitude: 40.7128,
+        altitude: -74.0060,
+        rooms: 3,
+        bathrooms: 2,
+        area: 150,
+        cost_per_night: 200,
+        max_people: 6,
+        slug: 'usa-new-york-123-main-st'
+    },
+    {
+        id: 'a2',
+        type: PropertyType.Apartment,
+        country: 'Canada',
+        city: 'Toronto',
+        address: '456 Queen St',
+        latitude: 43.6511,
+        altitude: -79.3470,
+        rooms: 2,
+        bathrooms: 1,
+        area: 100,
+        cost_per_night: 150,
+        max_people: 4,
+        slug: 'canada-toronto-456-queen-st'
+    },
+    {
+        id: 'a3',
+        type: PropertyType.Chalet,
+        country: 'Spain',
+        city: 'Barcelona',
+        address: '789 Beach Rd',
+        latitude: 41.3851,
+        altitude: 2.1734,
+        rooms: 4,
+        bathrooms: 3,
+        area: 200,
+        cost_per_night: 300,
+        max_people: 8,
+        slug: 'spain-barcelona-789-beach-rd'
+    },
+    {
+      id: expect.any(String),
+      type: PropertyType.Chalet,
+      country: 'Colombia',
+      city: 'Buga',
+      address: 'Calle 2 sur #15A-69',
+      latitude: 30.41,
+      altitude: 132.145,
+      rooms: 2,
+      bathrooms: 1,
+      area: 50,
+      cost_per_night: 20,
+      max_people: 4,
+      slug: 'colombia-buga-calle-2-sur-#15a-69'
+    },
+    ]
 
-    expect(mockPropertyService.findOne).toHaveBeenCalledWith('colombia-buga-calle-2-sur-#15a-69');
-    expect(mockPropertyService.findOne).toHaveBeenCalledTimes(1);
+    expect(controller.findAll()).toEqual(propertiesExp);
+
+    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
+    expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
   });
 });

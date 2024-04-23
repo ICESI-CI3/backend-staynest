@@ -29,8 +29,8 @@ export class PropertyController {
   // paginacion
   @UseGuards(AuthGuard)
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.propertyService.findAll(paginationDto);
+  findAll() {
+    return this.propertyService.findAll();
   }
 
   // find a property with a specific ID
