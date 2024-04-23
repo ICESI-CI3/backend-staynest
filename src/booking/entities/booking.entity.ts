@@ -1,9 +1,10 @@
 
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { PropertyType } from '../../enums/propertyType.enum';
 import { PaymentMethod } from '../../enums/paymentMethod.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('Bookings')
+
+@Entity('Booking')
 export class Booking {
 
     @PrimaryGeneratedColumn('uuid')
@@ -11,6 +12,7 @@ export class Booking {
 
     @Column('date', {nullable: false})
     check_in: Date;
+
 
     @Column('date', {nullable: false})
     check_out: Date;
