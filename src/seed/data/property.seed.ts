@@ -1,6 +1,6 @@
 import  {v4 as uuid} from 'uuid';
 import { Property } from "src/property/entities/property.entity";
-import { PropertyType } from 'src/enums/propertyType.enum';
+import { PropertyType } from '../../enums/propertyType.enum';
 
 export const propertySeed = [
     {

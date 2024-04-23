@@ -1,5 +1,5 @@
 
-import { Booking } from "src/booking/entities/booking.entity";
+import { Booking } from "../../booking/entities/booking.entity";
 import { PropertyType } from "../../enums/propertyType.enum";
 import { PaymentMethod } from "../../enums/paymentMethod.enum";
 import { v4 as uuid } from 'uuid';
