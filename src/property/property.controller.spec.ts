@@ -6,10 +6,14 @@ import { PropertyType } from '../enums/propertyType.enum';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthModule } from '../auth/auth.module';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { AppModule } from '../app.module';
 =======
 import { AppModule } from 'src/app.module';
 >>>>>>> 4a24a67 (feat (Property): Add property unit tests in .spec file)
+=======
+import { AppModule } from '../app.module';
+>>>>>>> 4be7ff3 (feat (Property): Change some spec imports)
 
 describe('PropertyController', () => {
   let controller: PropertyController;
