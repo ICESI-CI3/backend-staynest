@@ -3,8 +3,8 @@ import {v4 as uuid} from 'uuid';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { Booking } from './entities/booking.entity';
-import { PropertyType } from 'src/enums/propertyType.enum';
-import { PaymentMethod } from 'src/enums/paymentMethod.enum';
+import { PropertyType } from '../enums/propertyType.enum';
+import { PaymentMethod } from '../enums/paymentMethod.enum';
 
 
 
