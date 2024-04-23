@@ -69,9 +69,9 @@ describe('PropertyController', () => {
 
     // get properties
     findAll: jest.fn( () => 
-    ({
+    (
       properties
-    })),
+    )),
 
     // get property (slug o ID)
     findOne: jest.fn( (term) => {
@@ -80,7 +80,7 @@ describe('PropertyController', () => {
       if (!byID) {
         const bySlug = properties.find(property => property.slug === term);
 
-        if (!bySlug) {
+        if (bySlug) {
           return bySlug;
         } else {
           // Tipo de term no válido
@@ -98,7 +98,7 @@ describe('PropertyController', () => {
     })),
 
     // delete
-    delete: jest.fn( (id) => properties.filter(property => !id.includes(property.id)))
+    remove: jest.fn( (id) => properties.filter(property => !id.includes(property.id)))
   }
 
   beforeEach(async () => {
@@ -131,7 +131,7 @@ describe('PropertyController', () => {
       area: 50,
       cost_per_night: 20,
       max_people: 4,
-      slug: 'colombia-buga-calle-2-sur-#15a-69'
+      slug: 'colombia-buga-calle-2-sur--15a-69'
     };
 
     expect(controller.create(dto)).toEqual({
@@ -147,33 +147,59 @@ describe('PropertyController', () => {
       area: 50,
       cost_per_night: 20,
       max_people: 4,
-      slug: 'colombia-buga-calle-2-sur-#15a-69'
+      slug: 'colombia-buga-calle-2-sur--15a-69'
     });
 
     expect(mockPropertyService.create).toHaveBeenCalledWith(dto);
     expect(mockPropertyService.create).toHaveBeenCalledTimes(1);
   });
 
-  // get a property
+  // get a property by ID
   it('should get a property', () => {
-    expect(controller.findOne('colombia-buga-calle-2-sur-#15a-69')).toEqual({
-      id: expect.any(String),
-      type: PropertyType.Chalet,
-      country: 'Colombia',
-      city: 'Buga',
-      address: 'Calle 2 sur #15A-69',
-      latitude: 30.41,
-      altitude: 132.145,
-      rooms: 2,
-      bathrooms: 1,
-      area: 50,
-      cost_per_night: 20,
-      max_people: 4,
-      slug: 'colombia-buga-calle-2-sur-#15a-69'
-    });
+    expect(controller.findOne('a3')).toEqual(
+      {
+        id: 'a3',
+        type: PropertyType.Chalet,
+        country: 'Spain',
+        city: 'Barcelona',
+        address: '789 Beach Rd',
+        latitude: 41.3851,
+        altitude: 2.1734,
+        rooms: 4,
+        bathrooms: 3,
+        area: 200,
+        cost_per_night: 300,
+        max_people: 8,
+        slug: 'spain-barcelona-789-beach-rd'
+    }
+    );
 
-    expect(mockPropertyService.findOne).toHaveBeenCalledWith('colombia-buga-calle-2-sur-#15a-69');
+    expect(mockPropertyService.findOne).toHaveBeenCalledWith('a3');
     expect(mockPropertyService.findOne).toHaveBeenCalledTimes(1);
+  });
+
+  // get a property by slug
+  it('should get a property', () => {
+    expect(controller.findOne('canada-toronto-456-queen-st')).toEqual(
+      {
+        id: 'a2',
+        type: PropertyType.Apartment,
+        country: 'Canada',
+        city: 'Toronto',
+        address: '456 Queen St',
+        latitude: 43.6511,
+        altitude: -79.3470,
+        rooms: 2,
+        bathrooms: 1,
+        area: 100,
+        cost_per_night: 150,
+        max_people: 4,
+        slug: 'canada-toronto-456-queen-st'
+    }
+    );
+
+    expect(mockPropertyService.findOne).toHaveBeenCalledWith('canada-toronto-456-queen-st');
+    expect(mockPropertyService.findOne).toHaveBeenCalledTimes(2);
   });
 
   // get all properties
@@ -224,24 +250,90 @@ describe('PropertyController', () => {
         max_people: 8,
         slug: 'spain-barcelona-789-beach-rd'
     },
-    {
-      id: expect.any(String),
-      type: PropertyType.Chalet,
-      country: 'Colombia',
-      city: 'Buga',
-      address: 'Calle 2 sur #15A-69',
-      latitude: 30.41,
-      altitude: 132.145,
-      rooms: 2,
-      bathrooms: 1,
-      area: 50,
-      cost_per_night: 20,
-      max_people: 4,
-      slug: 'colombia-buga-calle-2-sur-#15a-69'
-    },
     ]
 
     expect(controller.findAll()).toEqual(propertiesExp);
+
+    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
+    expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
+  });
+
+  // update
+  it('should update a property', () => {  
+    const editedProperty = 
+      {
+        id: 'a1',
+        type: PropertyType.House,
+        country: 'Edited USA',
+        city: 'New York',
+        address: '123 Main St',
+        latitude: 40.7128,
+        altitude: -74.0060,
+        rooms: 3,
+        bathrooms: 2,
+        area: 150,
+        cost_per_night: 200,
+        max_people: 6,
+        slug: 'usa-new-york-123-main-st'
+    }
+
+    expect(controller.update('a1', {
+      id: 'a1',
+      type: PropertyType.House,
+      country: 'Edited USA',
+      city: 'New York',
+      address: '123 Main St',
+      latitude: 40.7128,
+      altitude: -74.0060,
+      rooms: 3,
+      bathrooms: 2,
+      area: 150,
+      cost_per_night: 200,
+      max_people: 6,
+      slug: 'usa-new-york-123-main-st'
+  })).toEqual(editedProperty);
+
+    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
+    expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
+  });
+
+  // delete
+  it('should delete a property', () => {
+    const propertiesAfterRemove = [
+    {
+        id: 'a2',
+        type: PropertyType.Apartment,
+        country: 'Canada',
+        city: 'Toronto',
+        address: '456 Queen St',
+        latitude: 43.6511,
+        altitude: -79.3470,
+        rooms: 2,
+        bathrooms: 1,
+        area: 100,
+        cost_per_night: 150,
+        max_people: 4,
+        slug: 'canada-toronto-456-queen-st'
+    },
+    {
+        id: 'a3',
+        type: PropertyType.Chalet,
+        country: 'Spain',
+        city: 'Barcelona',
+        address: '789 Beach Rd',
+        latitude: 41.3851,
+        altitude: 2.1734,
+        rooms: 4,
+        bathrooms: 3,
+        area: 200,
+        cost_per_night: 300,
+        max_people: 8,
+        slug: 'spain-barcelona-789-beach-rd'
+    }
+    
+    ]
+
+    expect(controller.remove('a1')).toEqual(propertiesAfterRemove);
 
     expect(mockPropertyService.findAll).toHaveBeenCalledWith();
     expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
