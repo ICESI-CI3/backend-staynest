@@ -35,15 +35,9 @@ import { SeedModule } from './seed/seed.module';
     BookingModule,
     UserModule,
     AuthModule,
-<<<<<<< HEAD
-    ReportsModule,
-    CommonModule],
-
-=======
     ReportModule,
     ReportModule,SeedModule
     ],
->>>>>>> 8a24a9c (add report structure)
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
