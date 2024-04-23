@@ -8,23 +8,23 @@ export class ReportController {
 
   
 
-  @Get('oc')
+  @Get('occupancy')
   generateReport() {
     console.log('generating report');
     return this.reportService.generateOccupancyReport();
   }
 
-  @Get('fr')
+  @Get('financial')
   generateFinancialReport() {
     return this.reportService.generateFinancialReport();
   }
 
-  @Get('rc')
+  @Get('revenue-by-city')
   generateRevenueByCity() {
     return this.reportService.generateRevenueByCityReport();
   }
 
-  @Get('ua')
+  @Get('user-activity')
   generateUserActivityReport() {
     return this.reportService.generateUserActivityReport();
   }
