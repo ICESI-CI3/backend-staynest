@@ -14,6 +14,12 @@ export class CreatePropertyDto {
     readonly address: string;
 
     @IsNumber()
+    readonly latitude: number;
+
+    @IsNumber()
+    readonly altitude: number;
+
+    @IsNumber()
     readonly rooms: number;
 
     @IsNumber()
