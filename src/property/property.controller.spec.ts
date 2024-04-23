@@ -5,7 +5,11 @@ import { Property } from './entities/property.entity';
 import { PropertyType } from '../enums/propertyType.enum';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthModule } from '../auth/auth.module';
+<<<<<<< HEAD
 import { AppModule } from '../app.module';
+=======
+import { AppModule } from 'src/app.module';
+>>>>>>> 4a24a67 (feat (Property): Add property unit tests in .spec file)
 
 describe('PropertyController', () => {
   let controller: PropertyController;
@@ -253,12 +257,31 @@ describe('PropertyController', () => {
         max_people: 8,
         slug: 'spain-barcelona-789-beach-rd'
     },
+<<<<<<< HEAD
+=======
+    {
+      id: expect.any(String),
+      type: PropertyType.Chalet,
+      country: 'Colombia',
+      city: 'Buga',
+      address: 'Calle 2 sur #15A-69',
+      latitude: 30.41,
+      altitude: 132.145,
+      rooms: 2,
+      bathrooms: 1,
+      area: 50,
+      cost_per_night: 20,
+      max_people: 4,
+      slug: 'colombia-buga-calle-2-sur-#15a-69'
+    },
+>>>>>>> 4a24a67 (feat (Property): Add property unit tests in .spec file)
     ]
 
     expect(controller.findAll()).toEqual(propertiesExp);
 
     expect(mockPropertyService.findAll).toHaveBeenCalledWith();
     expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
+<<<<<<< HEAD
   });
 
   // update
@@ -340,5 +363,7 @@ describe('PropertyController', () => {
 
     expect(mockPropertyService.findAll).toHaveBeenCalledWith();
     expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
+=======
+>>>>>>> 4a24a67 (feat (Property): Add property unit tests in .spec file)
   });
 });
