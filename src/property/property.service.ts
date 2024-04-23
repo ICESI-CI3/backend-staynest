@@ -97,6 +97,14 @@ export class PropertyService {
     await this.propertyRepository.remove( property );
   }
 
+  async populateWithSeedData(property: Property[]){
+    try {
+      await this.propertyRepository.save(property);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
   // manejamos la excepciones de la base de datos
   private handleDBExceptions( error: any ) {
     if ( error.code === '23505' )

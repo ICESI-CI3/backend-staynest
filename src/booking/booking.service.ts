@@ -69,6 +69,14 @@ export class BookingService {
     await this.bookingRepository.remove(booking);
   }
 
+  async populateWithSeedData(bookings: Booking[]) {
+    try {
+      await this.bookingRepository.save(bookings);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
   private handleDBExceptions(error: any) {
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);
