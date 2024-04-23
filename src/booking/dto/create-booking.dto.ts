@@ -1,6 +1,6 @@
 import { IsEnum, IsDate, IsString, IsNumber, IsBoolean, IsOptional, IsUUID } from 'class-validator';
-import { PropertyType } from 'src/enums/propertyType.enum';
-import { PaymentMethod } from 'src/enums/paymentMethod.enum';
+import { PropertyType } from '../../enums/propertyType.enum';
+import { PaymentMethod } from '../../enums/paymentMethod.enum';
 
 
 export class CreateBookingDto {
