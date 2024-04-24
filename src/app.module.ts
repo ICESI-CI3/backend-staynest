@@ -35,6 +35,8 @@ import { CommonModule } from './common/common.module';
       ssl: {
         rejectUnauthorized: false // This is generally not recommended for production unless you fully trust the network and the database.
       },
+      logger: 'advanced-console',
+      logging: 'all',
       
       
       
