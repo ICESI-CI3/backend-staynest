@@ -17,24 +17,6 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private users: User[] = [
-    // {
-    //   id: uuid(),
-    //   email: 'juan@juan.com',
-    //   password: '1234',
-    //   name: 'Juan',
-    //   role: Role.OWNER
-
-    // },
-    // {
-    //   id: uuid(),
-    //   email: 'pablo@pablo.com',
-    //   password: '1234',
-    //   name: 'Pablo',
-    //   role: Role.ADMIN 
-    // }
-  ];
-
   async create(createUserDto: CreateUserDto) {
     try {
 
