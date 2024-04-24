@@ -1,4 +1,3 @@
-
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { PropertyType } from '../../enums/propertyType.enum';
 import { PaymentMethod } from '../../enums/paymentMethod.enum';
@@ -32,9 +31,9 @@ export class Booking {
     @Column('text', {nullable: false})
     payment_method: PaymentMethod; 
 
-    @Column('boolean', {nullable: false})
+    @Column('boolean', {nullable: true})
     is_paid: boolean;
     
-    @Column('boolean', {nullable: false})
+    @Column('boolean', {nullable: true})
     is_confirmed: boolean; 
 }

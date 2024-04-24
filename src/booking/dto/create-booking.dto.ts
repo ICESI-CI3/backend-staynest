@@ -4,10 +4,10 @@ import { PaymentMethod } from '../../enums/paymentMethod.enum';
 
 
 export class CreateBookingDto {
-  @IsDate()
+  @IsString()
   readonly check_in: Date;
 
-  @IsDate()
+  @IsString()
   readonly check_out: Date;
 
   @IsEnum(PropertyType)
@@ -17,7 +17,7 @@ export class CreateBookingDto {
   readonly property_id: string; 
 
   @IsUUID()
-  readonly userId: string; 
+  readonly user_id: string; 
 
   @IsNumber()
   readonly num_people: number;
