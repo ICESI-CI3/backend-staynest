@@ -22,7 +22,7 @@ describe('PropertyController (e2e)', () => {
     
       it('/user/register (POST) should create a user and log in', async () => {
         const createUserDto = {
-          email: 'funcionaPorFavor@example.com',
+          email: 'funcionapuesomecarecjimba@example.com',
           password: 'testPassword',
           name: 'TestUser',
           role: 'OWNER'

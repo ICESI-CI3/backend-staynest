@@ -1,12 +1,13 @@
 import { Role } from "../../enums/role.enum";
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity('Users')
 export class User {
     
 
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    id: string ;
 
     @Column('text', { nullable: false })
     password: string;
@@ -26,3 +27,4 @@ export class User {
     }
 
 }
+

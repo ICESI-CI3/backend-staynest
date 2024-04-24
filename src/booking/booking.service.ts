@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
-import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { isUUID } from 'class-validator';
 
 @Injectable()
@@ -67,6 +67,14 @@ export class BookingService {
   async remove(id: string): Promise<void> {
     const booking = await this.findOne(id); 
     await this.bookingRepository.remove(booking);
+  }
+
+  async populateWithSeedData(bookings: Booking[]) {
+    try {
+      await this.bookingRepository.save(bookings);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 
   private handleDBExceptions(error: any) {

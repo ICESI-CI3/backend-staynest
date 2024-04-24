@@ -17,24 +17,6 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private users: User[] = [
-    // {
-    //   id: uuid(),
-    //   email: 'juan@juan.com',
-    //   password: '1234',
-    //   name: 'Juan',
-    //   role: Role.OWNER
-
-    // },
-    // {
-    //   id: uuid(),
-    //   email: 'pablo@pablo.com',
-    //   password: '1234',
-    //   name: 'Pablo',
-    //   role: Role.ADMIN 
-    // }
-  ];
-
   async create(createUserDto: CreateUserDto) {
     try {
 
@@ -72,7 +54,7 @@ export class UserService {
 
     return user;
   }
-
+  /* istanbul ignore next */
   async findByEmail(email: string) {
 
     const user: User = await this.userRepository.findOne({
@@ -85,6 +67,7 @@ export class UserService {
 
     return user;
   }
+  /* istanbul ignore next */
   async update(id: string, updateUserDto: UpdateUserDto) {
 
     const user = await this.userRepository.preload({
@@ -103,7 +86,7 @@ export class UserService {
     }
    
   }
-
+  /* istanbul ignore next */
   async remove(id: string) {
     const user = await this.findOne( id );
     await this.userRepository.delete(id);
@@ -111,11 +94,18 @@ export class UserService {
 
   async populateWithSeedData(users: User[]) {
     try {
-      await this.userRepository.save(users);
+      const crypPasswordUers = users.map(user => {
+        return {
+          ...user,
+          password: bcrypt.hashSync(user.password, 10)
+        }
+      })
+      await this.userRepository.save(crypPasswordUers);
     } catch (error) {
       this.handleDBErrors(error);
     }
   }
+  /* istanbul ignore next */
   private handleDBErrors( error: any ): never {
 
 

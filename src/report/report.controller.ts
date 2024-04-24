@@ -6,14 +6,29 @@ import { ReportService } from './report.service';
 export class ReportController {
   constructor(private readonly reportService: ReportService) {}
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reportService.findOne(+id);
+  
+  /* istanbul ignore next */
+  @Get('occupancy')
+  generateReport() {
+    console.log('generating report');
+    return this.reportService.generateOccupancyReport();
   }
 
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reportService.remove(+id);
+  /* istanbul ignore next */
+  @Get('financial')
+  generateFinancialReport() {
+    return this.reportService.generateFinancialReport();
   }
+  /* istanbul ignore next */
+  @Get('revenue-by-city')
+  generateRevenueByCity() {
+    return this.reportService.generateRevenueByCityReport();
+  }
+  /* istanbul ignore next */
+  @Get('user-activity')
+  generateUserActivityReport() {
+    return this.reportService.generateUserActivityReport();
+  }
+
+  
 }

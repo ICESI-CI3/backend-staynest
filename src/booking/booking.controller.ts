@@ -14,7 +14,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
-  @Roles(Role.USER)
+  @Roles(Role.OWNER, Role.USER)
   @UseGuards(AuthGuard, RolesGuard)
   @Post()
   create(@Body() createBookingDto: CreateBookingDto) {
@@ -26,6 +26,7 @@ export class BookingController {
   findOne(@Param('id') id: string) {
     return this.bookingService.findOne(String(id));
   }
+
 
   @UseGuards(AuthGuard)
   @Patch(':id')
