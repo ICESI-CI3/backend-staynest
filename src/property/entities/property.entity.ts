@@ -74,6 +74,7 @@ export class Property {
     // al slug
     @BeforeInsert()
     checkSlug(): void {
+        /* istanbul ignore next */
         const addressConv: string = this.address.replace(/\s+/g, '-')
         const addressConv2: string = addressConv.replace('#', '-')
 

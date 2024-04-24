@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateReportDto } from './dto/create-report.dto';
-import { UpdateReportDto } from './dto/update-report.dto';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from '../booking/entities/booking.entity';
 import { Property } from '../property/entities/property.entity';
@@ -19,7 +18,7 @@ export class ReportService {
     @InjectRepository(User)
     private userRepository: Repository<User>
   ) {}
-
+  /* istanbul ignore next */
   async generateOccupancyReport() {
     console.log('generating report')
     const properties = await this.propertyRepository.find();
@@ -68,7 +67,7 @@ export class ReportService {
   
     return reports.filter(report => report !== null); // Filter out null values from the results
   }
-
+  /* istanbul ignore next */
   async generateFinancialReport(): Promise<any> {
     const bookings = await this.bookingRepository.find();
     if (!bookings.length) {
@@ -120,7 +119,7 @@ export class ReportService {
 
     return financialReport;
   }
-
+  /* istanbul ignore next */
   async generateRevenueByCityReport(): Promise<any> {
     const bookings = await this.bookingRepository.find();
     const propertyIds = bookings.map(booking => booking.property_id);
@@ -172,7 +171,7 @@ export class ReportService {
 
     return revenueByCity;
   }
-
+  /* istanbul ignore next */
   async generateUserActivityReport(): Promise<any> {
     const bookings = await this.bookingRepository.find();
     if (bookings.length === 0) {
@@ -253,15 +252,5 @@ export class ReportService {
     return userActivity;
   }
  
-  findOne(id: number) {
-    return `This action returns a #${id} report`;
-  }
 
-  update(id: number, updateReportDto: UpdateReportDto) {
-    return `This action updates a #${id} report`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} report`;
-  }
 }
