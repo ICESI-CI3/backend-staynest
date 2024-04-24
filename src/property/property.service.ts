@@ -22,7 +22,6 @@ export class PropertyService {
   
   // create new property - recibimos DTO
   // TO DO: Crear una Location cada vez que se agregue !!!
-  /* istanbul ignore next */
   async create(createPropertyDto: CreatePropertyDto) {
     try{
       const property = this.propertyRepository.create(createPropertyDto);
@@ -36,7 +35,7 @@ export class PropertyService {
   }
 
   // find all - recibimos pagination por parametro
-  /* istanbul ignore next */
+  
   async findAll( ) {
     // find 
     return await this.propertyRepository.find();
@@ -44,7 +43,7 @@ export class PropertyService {
 
   // find one :  puede buscar por cualquiera de las dos propiedades
   // slug o ID
-  /* istanbul ignore next */
+  
   async findOne( term: string ) {
     let property: Property;
 
@@ -68,7 +67,7 @@ export class PropertyService {
   }
 
   // update
-  /* istanbul ignore next */
+  
   async update(id: string, updatePropertyDto: UpdatePropertyDto) {
     // buscamos la property y la updateamos haciendo merge
     // con el spread operator
@@ -90,7 +89,7 @@ export class PropertyService {
   }
 
   // remove 
-  /* istanbul ignore next */
+  
   async remove(id: string) {
     try {
       const property = await this.findOne( id );
@@ -99,7 +98,7 @@ export class PropertyService {
       this.handleDBExceptions(error);
     }
   }
-  /* istanbul ignore next */
+  
   async populateWithSeedData(property: Property[]){
     try {
       await this.propertyRepository.save(property);
@@ -110,7 +109,7 @@ export class PropertyService {
 
   // manejamos la excepciones de la base de datos
   private handleDBExceptions( error: any ) {
-    /* istanbul ignore next */
+    
     if ( error.code === '23505' )
       throw new BadRequestException(error.detail);
     

@@ -1,7 +1,7 @@
 import { User } from "../../user/entities/user.entity";
 import { Role } from "../../enums/role.enum"
 import  {v4 as uuid} from 'uuid';
-/* istanbul ignore next */
+
 export const userSeed: User[] = [
     {
         email: 'juan@juan.com',

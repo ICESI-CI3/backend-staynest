@@ -8,7 +8,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class IsPropertyType implements PipeTransform {
-  /* istanbul ignore next */
+  
   transform(value: any): any {
     value = value.toUpperCase(); // Convertir el valor a mayúsculas para comparar
     
