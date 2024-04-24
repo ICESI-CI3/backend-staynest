@@ -3,7 +3,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { PropertyService } from './property.service';
 import { Property } from './entities/property.entity';
 import { PropertyType } from '../enums/propertyType.enum';
-import { createQueryBuilder } from 'typeorm';
+import { Repository, createQueryBuilder } from 'typeorm';
 
 describe('PropertyService', () => {
   let service: PropertyService;
@@ -56,31 +56,28 @@ describe('PropertyService', () => {
   }
   ];
 
-  const mockPropertyRepository = {
-    createQueryBuilder: jest.fn((term) => term),
+  let propertyRepositoryMock: Partial<Record<keyof Repository<Property>, jest.Mock>>;
+
+  propertyRepositoryMock = {
+    createQueryBuilder: jest.fn(() => ({
+      where: jest.fn().mockReturnThis(),
+      getMany: jest.fn().mockResolvedValue(properties),
+      getOne: jest.fn().mockResolvedValue(properties[0]), // Asume que devolverá el primer elemento de properties para este ejemplo
+      delete: jest.fn().mockReturnThis(),
+      execute: jest.fn().mockResolvedValue(undefined),
+    })),
     preload: jest.fn((id, updateDto) => ({
         id,
         ...updateDto
     })),
-    getOne: jest.fn((term) => {
-        const byID = properties.find(property => property.id === term);
-    
-        if (!byID) {
-          const bySlug = properties.find(property => property.slug === term);
-  
-          if (bySlug) {
-            return bySlug;
-          } else {
-            // Tipo de term no válido
-            return "Not found";
-          }
-        } else {
-          return byID;
-        }
-      }),
     create: jest.fn((dto) => ({ id: Math.floor(Math.random() * 100), ...dto })),
     save: jest.fn((dto) => dto),
-    remove: jest.fn((id) => properties.filter(property => !id.includes(property.id))),
+    remove: jest.fn((id) => {
+      if (typeof id === 'string') {
+        return properties.filter(property => property.id !== id);
+      }
+      return [];
+    }),
     findOne: jest.fn( (term) => {
         const byID = properties.find(property => property.id === term);
     
@@ -101,10 +98,7 @@ describe('PropertyService', () => {
         id,
         ...updateDto
     })),
-    findAll: jest.fn( () => 
-        (
-          properties
-        )),
+    find: jest.fn(() => properties),
   };
 
   beforeEach(async () => {
@@ -113,7 +107,7 @@ describe('PropertyService', () => {
         PropertyService,
         {
           provide: getRepositoryToken(Property),
-          useValue: mockPropertyRepository,
+          useValue: propertyRepositoryMock,
         },
       ],
     }).compile();
@@ -125,7 +119,7 @@ describe('PropertyService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should create a property', () => {
+  it('should create a property', async () => {
     const dto = {
         type: PropertyType.Chalet,
         country: 'Colombia',
@@ -141,7 +135,7 @@ describe('PropertyService', () => {
         slug: 'colombia-buga-calle-2-sur--15a-69'
       };
 
-    expect(service.create(dto)).toEqual({
+    expect(await service.create(dto)).toEqual({
       id: expect.any(Number),
       type: PropertyType.Chalet,
         country: 'Colombia',
@@ -158,7 +152,7 @@ describe('PropertyService', () => {
     });
   });
 
-  it('should save a property', () => {
+  it('should save a property', async () => {
     const dto = {
         type: PropertyType.Chalet,
         country: 'Colombia',
@@ -174,7 +168,7 @@ describe('PropertyService', () => {
         slug: 'colombia-buga-calle-2-sur--15a-69'
       };
 
-    expect(service.create(dto)).toEqual({
+    expect(await service.create(dto)).toEqual({
       id: expect.any(Number),
       type: PropertyType.Chalet,
         country: 'Colombia',
@@ -191,7 +185,7 @@ describe('PropertyService', () => {
     });
   });
 
-  it('should update a property', () => {
+  it('should update a property', async () => {
     const editedProperty = 
       {
         id: 'a1',
@@ -209,7 +203,7 @@ describe('PropertyService', () => {
         slug: 'usa-new-york-123-main-st'
     }
 
-    expect(service.update('a1', {
+    expect(await service.update('a1', {
       id: 'a1',
       type: PropertyType.House,
       country: 'Edited USA',
@@ -226,7 +220,7 @@ describe('PropertyService', () => {
   })).toEqual(editedProperty);
   });
 
-  it('should delete a property', () => {
+  it('should delete a property', async () => {
     const propertiesAfterRemove = [
     {
         id: 'a2',
@@ -261,14 +255,14 @@ describe('PropertyService', () => {
     
     ]
 
-    expect(service.remove('a1')).toEqual(propertiesAfterRemove);
+    expect(await service.remove('a1')).toEqual(propertiesAfterRemove);
 
-    expect(mockPropertyRepository.findAll).toHaveBeenCalledWith();
-    expect(mockPropertyRepository.findAll).toHaveBeenCalledTimes(1);
+    expect(propertyRepositoryMock.find).toHaveBeenCalledWith();
+    expect(propertyRepositoryMock.find).toHaveBeenCalledTimes(1);
   });
 
-  it('should get a property', () => {
-    expect(service.findOne('canada-toronto-456-queen-st')).toEqual(
+  it('should get a property', async () => {
+    expect(await service.findOne('canada-toronto-456-queen-st')).toEqual(
       {
         id: 'a2',
         type: PropertyType.Apartment,
@@ -286,12 +280,12 @@ describe('PropertyService', () => {
     }
     );
 
-    expect(mockPropertyRepository.findOne).toHaveBeenCalledWith('canada-toronto-456-queen-st');
-    expect(mockPropertyRepository.findOne).toHaveBeenCalledTimes(2);
+    expect(propertyRepositoryMock.findOne).toHaveBeenCalledWith('canada-toronto-456-queen-st');
+    expect(propertyRepositoryMock.findOne).toHaveBeenCalledTimes(2);
   });
 
   // get all properties
-  it('should get all properties', () => {  
+  it('should get all properties', async () => {  
     const propertiesExp = [
       {
         id: 'a1',
@@ -340,9 +334,9 @@ describe('PropertyService', () => {
     },
     ]
 
-    expect(service.findAll()).toEqual(propertiesExp);
+    expect(await service.findAll()).toEqual(propertiesExp);
 
-    expect(mockPropertyRepository.findAll).toHaveBeenCalledWith();
-    expect(mockPropertyRepository.findAll).toHaveBeenCalledTimes(1);
+    expect(propertyRepositoryMock.find).toHaveBeenCalledWith();
+    expect(propertyRepositoryMock.find).toHaveBeenCalledTimes(1);
   });
 });
