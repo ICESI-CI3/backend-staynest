@@ -4,7 +4,12 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
+  console.log("Hey you");
+  console.log(process.env.DB_HOST);
+  console.log(process.env.DB_PORT);
+  console.log(process.env.DB_USER);
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // guarda el objeto SOLO con lo necesario

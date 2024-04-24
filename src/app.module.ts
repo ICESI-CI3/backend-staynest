@@ -5,13 +5,14 @@ import { PropertyModule } from './property/property.module';
 import { BookingModule } from './booking/booking.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ReportsModule } from './reports/reports.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { ReportModule } from './report/report.module';
+import { SeedModule } from './seed/seed.module';
 import { CommonModule } from './common/common.module';
 
 
@@ -19,6 +20,7 @@ import { CommonModule } from './common/common.module';
   imports: [
     ConfigModule.forRoot({
     isGlobal: true,
+
     }),
 
     TypeOrmModule.forRoot({
@@ -30,15 +32,21 @@ import { CommonModule } from './common/common.module';
       database: process.env.DB_NAME,
       synchronize: true, 
       autoLoadEntities: true,
+      ssl: {
+        rejectUnauthorized: false // This is generally not recommended for production unless you fully trust the network and the database.
+      },
+      
+      
+      
     }),
 
     PropertyModule,
     BookingModule,
     UserModule,
     AuthModule,
-    ReportsModule,
-    CommonModule],
-
+    ReportModule,
+    ReportModule,SeedModule,
+  ],
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
@@ -47,5 +55,5 @@ import { CommonModule } from './common/common.module';
 
 
 export class AppModule  {
-
+  
 }

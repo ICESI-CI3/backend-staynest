@@ -29,14 +29,15 @@ export class PropertyController {
   // paginacion
   @UseGuards(AuthGuard)
   @Get()
-  findAll(@Query() paginationDto: PaginationDto) {
-    return this.propertyService.findAll(paginationDto);
+  findAll() {
+    return this.propertyService.findAll();
   }
 
   // find a property with a specific ID
   @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  findOne(@Param('id') id: string) {
+    console.log("slug: " + id)
     return this.propertyService.findOne(id);
   }
 

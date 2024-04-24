@@ -1,83 +1,87 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import {v4 as uuid} from 'uuid';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
-import { Booking } from './entities/booking.entity';
-import { PropertyType } from 'src/enums/propertyType.enum';
-import { PaymentMethod } from 'src/enums/paymentMethod.enum';
-
-
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class BookingService {
-  private bookings: Booking[] = [
-    {
-      id: uuid(),
-      check_in: new Date(),
-      check_out: new Date(),
-      property_type: PropertyType.Apartment,
-      property_id: "1",
-      user_id: "2",
-      num_people: 3,
-      payment_method: PaymentMethod.Credit_card,
-      is_paid: true, 
-      is_confirmed: true, 
-    }
-  ];
+  private readonly logger = new Logger('BookingService');
+
+  constructor(
+    @InjectRepository(Booking)
+    private readonly bookingRepository: Repository<Booking>
+  ) {}
+
 
   async create(createBookingDto: CreateBookingDto): Promise<Booking> {
-    const booking : Booking ={
-      id: uuid(),
-      check_in: createBookingDto.check_in,
-      check_out: createBookingDto.check_out,
-      property_type: createBookingDto.property_type,
-      property_id: createBookingDto.property_id,
-      user_id: createBookingDto.userId,
-      num_people: createBookingDto.num_people,
-      payment_method: createBookingDto.payment_method,
-      is_paid: createBookingDto.is_paid,
-      is_confirmed: createBookingDto.is_confirmed,
-    };
-    this.bookings.push(booking);
+    try {
+      const booking = this.bookingRepository.create(createBookingDto);
+      await this.bookingRepository.save(booking);
+      return booking;
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
+
+  async findAll(paginationDto: PaginationDto): Promise<Booking[]> {
+    const { limit = 10, offset = 0 } = paginationDto;
+    return await this.bookingRepository.find({
+      take: limit,
+      skip: offset,
+    });
+  }
+
+  async findOne(id: string): Promise<Booking> {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid identifier');
+    }
+    const booking = await this.bookingRepository.findOneBy({ id });
+    if (!booking) {
+      throw new NotFoundException(`Booking with ID "${id}" not found`);
+    }
     return booking;
   }
 
-  findAll() {
-    return this.bookings;
-  }
 
-  findOne(id: string) {
-    const booking: Booking = this.bookings.find(book => book.id === id);
-        if (!booking) {
-            throw new NotFoundException(`No bookings`);
-        }
-
-        return booking;
-  }
-
-  update(id: string, updateBookingDto: UpdateBookingDto): Booking {
-    const bookingIndex = this.bookings.findIndex((book) => book.id === id);
-    if (bookingIndex === -1) {
-      throw new NotFoundException(`Booking with ID "${id}" not found.`);
+  async update(id: string, updateBookingDto: UpdateBookingDto): Promise<Booking> {
+    const booking = await this.bookingRepository.preload({
+      id: id,
+      ...updateBookingDto
+    });
+    if (!booking) {
+      throw new NotFoundException(`Booking with ID "${id}" not found`);
     }
-  
-    const updatedBooking = { ...this.bookings[bookingIndex], ...updateBookingDto };
-    this.bookings[bookingIndex] = updatedBooking;
-    return updatedBooking;
-  }
-  
-
-  remove(id: string): { message: string } {
-    const bookingIndex = this.bookings.findIndex((book) => book.id === id);
-    if (bookingIndex === -1) {
-      throw new NotFoundException(`Booking with ID "${id}" not found.`);
+    try {
+      await this.bookingRepository.save(booking);
+      return booking;
+    } catch (error) {
+      this.handleDBExceptions(error);
     }
-  
-    this.bookings.splice(bookingIndex, 1);
-  
-    return { message: `Booking with ID "${id}" has been removed.` };
   }
-  
-  
+
+  async remove(id: string): Promise<void> {
+    const booking = await this.findOne(id); 
+    await this.bookingRepository.remove(booking);
+  }
+
+  async populateWithSeedData(bookings: Booking[]) {
+    try {
+      await this.bookingRepository.save(bookings);
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
+  }
+
+  private handleDBExceptions(error: any) {
+    if (error.code === '23505') {
+      throw new BadRequestException(error.detail);
+    }
+    this.logger.error(`Database error: ${error.message}`, error.trace);
+    throw new InternalServerErrorException('Unexpected error, check server logs');
+  }
 }
-
