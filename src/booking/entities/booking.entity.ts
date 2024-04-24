@@ -9,6 +9,8 @@ export class Booking {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
+
+    @Column('date', {nullable: false})
     check_in: Date;
 
 
