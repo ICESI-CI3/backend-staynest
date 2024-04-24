@@ -74,11 +74,13 @@ export class Property {
     // al slug
     @BeforeInsert()
     checkSlug(): void {
+        const addressConv: string = this.address.replace(/\s+/g, '-')
+        const addressConv2: string = addressConv.replace('#', '-')
+
         if (!this.slug) {
-            this.slug = `${this.country}-${this.city}-${this.address}`;
+            this.slug = `${this.country}-${this.city}-${addressConv2}`;
         }
 
         this.slug = this.slug.toLowerCase();
     }
 }
-
