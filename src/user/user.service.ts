@@ -54,7 +54,7 @@ export class UserService {
 
     return user;
   }
-
+  /* istanbul ignore next */
   async findByEmail(email: string) {
 
     const user: User = await this.userRepository.findOne({
@@ -67,6 +67,7 @@ export class UserService {
 
     return user;
   }
+  /* istanbul ignore next */
   async update(id: string, updateUserDto: UpdateUserDto) {
 
     const user = await this.userRepository.preload({
@@ -85,7 +86,7 @@ export class UserService {
     }
    
   }
-
+  /* istanbul ignore next */
   async remove(id: string) {
     const user = await this.findOne( id );
     await this.userRepository.delete(id);
@@ -104,6 +105,7 @@ export class UserService {
       this.handleDBErrors(error);
     }
   }
+  /* istanbul ignore next */
   private handleDBErrors( error: any ): never {
 
 

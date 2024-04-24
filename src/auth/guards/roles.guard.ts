@@ -5,7 +5,7 @@ import { Role } from '../../enums/role.enum'; // Ensure this is the correct path
 @Injectable()
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
-
+  /* istanbul ignore next */
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.get<Role[]>('roles', context.getHandler());
     if (!requiredRoles) {

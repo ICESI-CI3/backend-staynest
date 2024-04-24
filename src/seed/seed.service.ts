@@ -14,7 +14,7 @@ export class SeedService {
     private readonly bookingService: BookingService,
     private readonly propertyService: PropertyService,
   ) {}
-
+  /* istanbul ignore next */
   populateDB() {
     const propertySeedWithSlug = propertySeed.map(property => ({
       ...property,

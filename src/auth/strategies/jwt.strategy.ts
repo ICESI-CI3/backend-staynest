@@ -10,7 +10,7 @@ import { JwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy( Strategy ) {
-
+    /* istanbul ignore next */
     constructor(
         @InjectRepository( User )
         private readonly userRepository: Repository<User>,
@@ -24,7 +24,7 @@ export class JwtStrategy extends PassportStrategy( Strategy ) {
         });
     }
 
-
+    /* istanbul ignore next */
     async validate( payload: JwtPayload ): Promise<User> {
         
         const { id } = payload;

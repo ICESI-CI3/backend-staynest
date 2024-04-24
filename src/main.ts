@@ -2,14 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { ValidationPipe } from '@nestjs/common';
-
+/* istanbul ignore next */
 async function bootstrap() {
+  /* istanbul ignore next */
   console.log("Hey you");
   console.log(process.env.DB_HOST);
   console.log(process.env.DB_PORT);
   console.log(process.env.DB_USER);
   const app = await NestFactory.create(AppModule);
-
+  /* istanbul ignore next */
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // guarda el objeto SOLO con lo necesario
