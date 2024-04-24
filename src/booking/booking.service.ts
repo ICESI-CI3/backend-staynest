@@ -4,8 +4,9 @@ import { Repository } from 'typeorm';
 import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
-import { PaginationDto } from '../common/dto/pagination.dto';
 import { isUUID } from 'class-validator';
+import { Property } from 'src/property/entities/property.entity';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class BookingService {
@@ -13,15 +14,38 @@ export class BookingService {
 
   constructor(
     @InjectRepository(Booking)
-    private readonly bookingRepository: Repository<Booking>
+      private readonly bookingRepository: Repository<Booking>,
+    @InjectRepository(Property)
+    private readonly propertyRepository: Repository<Property>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>
   ) {}
 
+  // verifica la existencia de la propiedad
+  async verifyProperty(propertyId: string): Promise<boolean> {
+    const properties = await this.propertyRepository.find();
+
+    return properties.some(prop => prop.id === propertyId);
+  }
+  // verifica la existencia del usuario
+  async verifyUser(userId: string): Promise<boolean> {
+    const users = await this.userRepository.find();
+
+    return users.some(user => user.id === userId);
+  }
 
   async create(createBookingDto: CreateBookingDto): Promise<Booking> {
     try {
-      const booking = this.bookingRepository.create(createBookingDto);
-      await this.bookingRepository.save(booking);
-      return booking;
+      const propertyToBook = createBookingDto.property_id;
+      const userBooking = createBookingDto.user_id;
+
+      if ((await this.verifyUser(userBooking)) == true && (await this.verifyProperty(propertyToBook)) == true){
+        const booking = this.bookingRepository.create(createBookingDto);
+        await this.bookingRepository.save(booking);
+        return booking;
+      } else {
+        throw new NotFoundException(`Property with ID "${propertyToBook}" OR User with ID "${userBooking}" not found`);
+      }
     } catch (error) {
       this.handleDBExceptions(error);
     }
@@ -42,7 +66,6 @@ export class BookingService {
     }
     return booking;
   }
-
 
   async update(id: string, updateBookingDto: UpdateBookingDto): Promise<Booking> {
     const booking = await this.bookingRepository.preload({

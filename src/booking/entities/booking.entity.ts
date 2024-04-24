@@ -13,7 +13,6 @@ export class Booking {
     @Column('date', {nullable: false})
     check_in: Date;
 
-
     @Column('date', {nullable: false})
     check_out: Date;
 

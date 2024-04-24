@@ -6,6 +6,9 @@ import { AuthModule } from '../auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { Booking } from './entities/booking.entity';
+import { UserModule } from 'src/user/user.module';
+import { User } from 'src/user/entities/user.entity';
+import { Property } from 'src/property/entities/property.entity';
 
 @Module({
   controllers: [BookingController],
@@ -13,7 +16,7 @@ import { Booking } from './entities/booking.entity';
   exports: [BookingService, TypeOrmModule],
   imports: [
     forwardRef(() => AuthModule),
-    TypeOrmModule.forFeature([Booking]),
+    TypeOrmModule.forFeature([Booking, User, Property]),
   ]
 
 })
