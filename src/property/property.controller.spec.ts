@@ -59,6 +59,9 @@ describe('PropertyController', () => {
   ];
 
   // simulamos el servicio
+  // debe haber correspondencia en
+  // nombres del servicio real
+  // y el mock
   const mockPropertyService = {
     // create property
     create: jest.fn( (propertyDto) => 
