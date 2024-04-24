@@ -28,12 +28,8 @@ export class BookingService {
   }
 
 
-  async findAll(paginationDto: PaginationDto): Promise<Booking[]> {
-    const { limit = 10, offset = 0 } = paginationDto;
-    return await this.bookingRepository.find({
-      take: limit,
-      skip: offset,
-    });
+  async findAll(): Promise<Booking[]> {
+    return await this.bookingRepository.find();
   }
 
   async findOne(id: string): Promise<Booking> {

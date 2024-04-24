@@ -34,7 +34,7 @@ export class PropertyService {
     }
   }
 
-  // find all - recibimos pagination por parametro
+  // find all
   async findAll( ) {
     // find 
     return await this.propertyRepository.find();
