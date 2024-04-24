@@ -9,7 +9,7 @@ export class AuthService {
     private usersService: UserService,
     private jwtService: JwtService
   ) {}
-  /* istanbul ignore next */
+  
   async signIn(
     email: string,
     pass: string,

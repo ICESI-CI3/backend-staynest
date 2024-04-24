@@ -18,7 +18,7 @@ export class ReportService {
     @InjectRepository(User)
     private userRepository: Repository<User>
   ) {}
-  /* istanbul ignore next */
+  
   async generateOccupancyReport() {
     console.log('generating report')
     const properties = await this.propertyRepository.find();
@@ -67,7 +67,7 @@ export class ReportService {
   
     return reports.filter(report => report !== null); // Filter out null values from the results
   }
-  /* istanbul ignore next */
+ 
   async generateFinancialReport(): Promise<any> {
     const bookings = await this.bookingRepository.find();
     if (!bookings.length) {
@@ -119,7 +119,7 @@ export class ReportService {
 
     return financialReport;
   }
-  /* istanbul ignore next */
+  
   async generateRevenueByCityReport(): Promise<any> {
     const bookings = await this.bookingRepository.find();
     const propertyIds = bookings.map(booking => booking.property_id);
@@ -171,7 +171,7 @@ export class ReportService {
 
     return revenueByCity;
   }
-  /* istanbul ignore next */
+
   async generateUserActivityReport(): Promise<any> {
     const bookings = await this.bookingRepository.find();
     if (bookings.length === 0) {
