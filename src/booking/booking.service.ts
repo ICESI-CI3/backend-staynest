@@ -5,8 +5,8 @@ import { Booking } from './entities/booking.entity';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { isUUID } from 'class-validator';
-import { Property } from 'src/property/entities/property.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Property } from '../property/entities/property.entity';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class BookingService {

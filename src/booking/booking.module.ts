@@ -7,8 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { Booking } from './entities/booking.entity';
 import { UserModule } from 'src/user/user.module';
-import { User } from 'src/user/entities/user.entity';
-import { Property } from 'src/property/entities/property.entity';
+import { User } from '../user/entities/user.entity';
+import { Property } from '../property/entities/property.entity';
 
 @Module({
   controllers: [BookingController],
