@@ -1,103 +1,268 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
-import { HttpStatus, INestApplication } from '@nestjs/common';
-import { AppModule } from '../../src/app.module';
-import { v4 as uuid } from 'uuid';
+import { BookingController } from './booking.controller';
+import { BookingService } from './booking.service';
+import { Booking } from './entities/booking.entity';
+import { PropertyType } from '../enums/propertyType.enum';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { AuthModule } from '../auth/auth.module';
+import { AppModule } from '../app.module';
+import  {v4 as uuid} from 'uuid';
+import { PaymentMethod } from '../enums/paymentMethod.enum';
 
-describe('BookingController (e2e)', () => {
-  let app: INestApplication;
-  let bookingId: string;
-  let tokenId: string; // Token to be used in authenticated requests
-  let userId: string;
+describe('BookingController', () => {
+  let controller: BookingController;
+  let date2 = new Date();
+  let bookings = [
+    {
+      id: '123',
+      check_in: date2,
+      check_out: date2,
+      property_type: PropertyType.Apartment,
+      property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+      user_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+      num_people: 2,
+      payment_method: PaymentMethod.Credit_card,
+      is_paid: true,
+      is_confirmed: false,
+  },
+  {
+    id: '1234',
+    check_in: date2,
+    check_out: date2,
+    property_type: PropertyType.Apartment,
+    property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+    user_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+    num_people: 3,
+    payment_method: PaymentMethod.Credit_card,
+    is_paid: true,
+    is_confirmed: false,
+  },
+  {
+    id: '12345',
+    check_in: date2,
+    check_out: date2,
+    property_type: PropertyType.Apartment,
+    property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+    user_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+    num_people: 4,
+    payment_method: PaymentMethod.Credit_card,
+    is_paid: true,
+    is_confirmed: false,
+  }
+  ];
 
-  beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+  // simulamos el servicio
+  // debe haber correspondencia en
+  // nombres del servicio real
+  // y el mock
+  const mockBookingService = {
+    // create property
+    create: jest.fn( (bookingDto) => 
+    ({
+      id: 'a' + Math.floor(Math.random() * 100),
+      ...bookingDto
+    }) ),
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+    // get properties
+    findAll: jest.fn( () => 
+    (
+      bookings
+    )),
+
+    // get property (slug o ID)
+    findOne: jest.fn( (term) => {
+      const byID = bookings.find(booking => booking.id === term);
+  
+    }),
+
+    // update
+    update: jest.fn( (id, updateBookingDto) => ({
+      id: id,
+      ...updateBookingDto,
+    })),
+
+    // delete
+    remove: jest.fn( (id) => bookings.filter(booking => !id.includes(booking.id)))
+  }
+
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      controllers: [BookingController],
+      providers: [BookingService],
+      imports: [AuthModule, AppModule],
+    }).overrideProvider(BookingService)
+    .useValue(mockBookingService)
+    .compile();;
+
+    controller = module.get<BookingController>(BookingController);
   });
 
-  it('/user/register (POST) should create a user and log in', async () => {
-    const createUserDto = {
-      email: 'test@example.com',
-      password: 'testPassword',
-      name: 'Test User',
-      role: 'OWNER'
+  it('should be defined', () => {
+    expect(controller).toBeDefined();
+  });
+
+  let date = new Date();
+  // create booking
+  it('should create a booking', () => {
+    const dto = {
+      id: '123',
+      check_in: date,
+      check_out: date,
+      property_type: PropertyType.Apartment,
+      property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+      userId:'3d2fc0d6-0334-46b5-966d-cb6bfd953e25',
+      num_people: 2,
+      payment_method: PaymentMethod.Credit_card,
+      is_paid: true,
+      is_confirmed: false,
     };
 
-    const userResponse = await request(app.getHttpServer())
-      .post('/user/register')
-      .send(createUserDto)
-      .expect(HttpStatus.CREATED);
+    expect(controller.create(dto)).toEqual({
+      id: expect.any(String),
+      check_in: date,
+      check_out: date,
+      property_type: PropertyType.Apartment,
+      property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+      userId: '3d2fc0d6-0334-46b5-966d-cb6bfd953e25',
+      num_people: 2,
+      payment_method: PaymentMethod.Credit_card,
+      is_paid: true,
+      is_confirmed: false,
+    });
 
-    userId = userResponse.body.id;
-
-    const loginResponse = await request(app.getHttpServer())
-      .post('/auth/login')
-      .send({
-        email: createUserDto.email,
-        password: createUserDto.password
-      })
-      .expect(HttpStatus.OK);
-
-    tokenId = loginResponse.body.access_token;
+    expect(mockBookingService.create).toHaveBeenCalledWith(dto);
+    expect(mockBookingService.create).toHaveBeenCalledTimes(1);
   });
 
-  it('/booking (POST) should create a booking', async () => {
-    const bookingDto = {
+  // get a booking by ID
+  it('should get a booking', () => {
+    expect(controller.findOne('123')).toEqual(
+      {
+        id: '123',
+        check_in: date,
+        check_out: date,
+        property_type: PropertyType.Apartment,
+        property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+        userId:'3d2fc0d6-0334-46b5-966d-cb6bfd953e25',
+        num_people: 2,
+        payment_method: PaymentMethod.Credit_card,
+        is_paid: true,
+        is_confirmed: false,
+    }
+    );
+
+    expect(mockBookingService.findOne).toHaveBeenCalledWith('a3');
+    expect(mockBookingService.findOne).toHaveBeenCalledTimes(1);
+  });
+
+  
+  // get all bookings
+  it('should get all bookings', () => {  
+    const bookingsExp = [
+      {
+        id: '123',
       check_in: new Date(),
       check_out: new Date(),
-      property_type: 'Apartment',
+      property_type: PropertyType.Apartment,
       property_id: uuid(),
-      user_id: userId,
+      user_id: uuid(),
       num_people: 2,
-      payment_method: 'Credit_card',
+      payment_method: PaymentMethod.Credit_card,
       is_paid: true,
-      is_confirmed: false
-    };
+      is_confirmed: false,
+    },
+    {
+      id: '1234',
+      check_in: new Date(),
+      check_out: new Date(),
+      property_type: PropertyType.Apartment,
+      property_id: uuid(),
+      user_id: uuid(),
+      num_people: 3,
+      payment_method: PaymentMethod.Credit_card,
+      is_paid: true,
+      is_confirmed: false,
+    },
+    {
+      id: '12345',
+      check_in: new Date(),
+      check_out: new Date(),
+      property_type: PropertyType.Apartment,
+      property_id: uuid(),
+      user_id: uuid(),
+      num_people: 4,
+      payment_method: PaymentMethod.Credit_card,
+      is_paid: true,
+      is_confirmed: false,
+    },
+    ]
+  });
+  // update
+  it('should update a booking', () => {  
+    const editedBooking = 
+      {
+        id: '123',
+        check_in: date,
+        check_out: date,
+        property_type: PropertyType.Apartment,
+        property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+        userId:'3d2fc0d6-0334-46b5-966d-cb6bfd953e25',
+        num_people: 3,
+        payment_method: PaymentMethod.Credit_card,
+        is_paid: true,
+        is_confirmed: false,
+    }
 
-    const response = await request(app.getHttpServer())
-      .post('/booking')
-      .set('Authorization', `Bearer ${tokenId}`)
-      .send(bookingDto)
-      .expect(HttpStatus.CREATED);
+    expect(controller.update('123', {
+      check_in: date,
+      check_out: date,
+      property_type: PropertyType.Apartment,
+      property_id: '1196240a-cece-4230-83a3-bf724644f2fa',
+      userId:'3d2fc0d6-0334-46b5-966d-cb6bfd953e25',
+      num_people: 2,
+      payment_method: PaymentMethod.Credit_card,
+      is_paid: true,
+      is_confirmed: false,
 
-    bookingId = response.body.id;
+  })).toEqual(editedBooking);
+
+    expect(mockBookingService.findAll).toHaveBeenCalledWith();
+    expect(mockBookingService.findAll).toHaveBeenCalledTimes(1);
   });
 
-  it('/booking/:id (GET) should return specific booking', async () => {
-    await request(app.getHttpServer())
-      .get(`/booking/${bookingId}`)
-      .set('Authorization', `Bearer ${tokenId}`)
-      .expect(HttpStatus.OK);
-  });
+  // delete
+  it('should delete a bookings', () => {
+    const bookingsAfterRemove = [
+      {
+        id: '1234',
+        check_in: new Date(),
+        check_out: new Date(),
+        property_type: PropertyType.Apartment,
+        property_id: uuid(),
+        user_id: uuid(),
+        num_people: 3,
+        payment_method: PaymentMethod.Credit_card,
+        is_paid: true,
+        is_confirmed: false,
+      },
+      {
+        id: '12345',
+        check_in: new Date(),
+        check_out: new Date(),
+        property_type: PropertyType.Apartment,
+        property_id: uuid(),
+        user_id: uuid(),
+        num_people: 4,
+        payment_method: PaymentMethod.Credit_card,
+        is_paid: true,
+        is_confirmed: false,
+      }
+    
+    ]
 
-  it('/booking/:id (PATCH) should update a booking', async () => {
-    const updateDto = { num_people: 3 };
+    expect(controller.remove('123')).toEqual(bookingsAfterRemove);
 
-    await request(app.getHttpServer())
-      .patch(`/booking/${bookingId}`)
-      .set('Authorization', `Bearer ${tokenId}`)
-      .send(updateDto)
-      .expect(HttpStatus.OK);
-  });
-
-  it('/booking/:id (DELETE) should delete a booking', async () => {
-    await request(app.getHttpServer())
-      .delete(`/booking/${bookingId}`)
-      .set('Authorization', `Bearer ${tokenId}`)
-      .expect(HttpStatus.OK);
-  });
-
-  it('/user/:id (DELETE) should remove the user', async () => {
-    await request(app.getHttpServer())
-      .delete(`/user/${userId}`)
-      .expect(HttpStatus.OK);
-  });
-
-  afterAll(async () => {
-    await app.close();
+    expect(mockBookingService.findAll).toHaveBeenCalledWith();
+    expect(mockBookingService.findAll).toHaveBeenCalledTimes(1);
   });
 });

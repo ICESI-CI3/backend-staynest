@@ -27,6 +27,7 @@ export class BookingController {
     return this.bookingService.findOne(String(id));
   }
 
+
   @UseGuards(AuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBookingDto: UpdateBookingDto) {
