@@ -5,15 +5,16 @@ import { PropertyModule } from './property/property.module';
 import { BookingModule } from './booking/booking.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { ReportsModule } from './reports/reports.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './auth/guards/roles.guard';
 import { AuthGuard } from './auth/guards/auth.guard';
-
 import { ConfigModule } from '@nestjs/config';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user/entities/user.entity';
+import { ReportModule } from './report/report.module';
+import { SeedModule } from './seed/seed.module';
+import { CommonModule } from './common/common.module';
+
 
 @Module({
   imports: [
@@ -21,32 +22,38 @@ import { User } from './user/entities/user.entity';
     isGlobal: true,
 
     }),
+
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,  
+      database: process.env.DB_NAME,
+      synchronize: true, 
       autoLoadEntities: true,
       ssl: {
         rejectUnauthorized: false // This is generally not recommended for production unless you fully trust the network and the database.
       },
-      logging: true,
-      logger: 'advanced-console'
+      
+      
       
     }),
+
     PropertyModule,
     BookingModule,
     UserModule,
     AuthModule,
-    ReportsModule,
+    ReportModule,
+    CommonModule,SeedModule
     ],
   controllers: [AppController],
   providers: [AppService, 
     AuthGuard],
   exports: [TypeOrmModule]
 })
+
+
 export class AppModule  {
   
 }

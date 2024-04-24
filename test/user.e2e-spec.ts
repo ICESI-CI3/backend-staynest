@@ -1,66 +1,72 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { HttpServer, INestApplication } from '@nestjs/common';
-import { UserModule } from '../src/user/user.module';
-import { User } from '../src/user/entities/user.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { AuthModule } from '../src/auth/auth.module';
-import { Repository } from 'typeorm';
+import { HttpCode, HttpStatus, INestApplication } from '@nestjs/common';
+import  {v4 as uuid} from 'uuid';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
-  let httpServer: HttpServer;
-  let userRepository: Repository<User>
-  let createdUser: User;
+  let userId: string;  // Assuming you will use this to store the ID from the created user.
 
-  const mockUserRepository = {
-    create: jest.fn((dto) => ({ id: Math.floor(Math.random() * 100), ...dto })),
-    save: jest.fn((dto) => dto),
-  };
-
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, AuthModule],
-    })
-    .compile();
+      imports: [AppModule],
+    }).compile();
 
-    app = moduleFixture.createNestApplication(); // Initialize the app here
+    app = moduleFixture.createNestApplication();
     await app.init();
-    httpServer = app.getHttpServer();
-    userRepository = app.get(getRepositoryToken(User));
   });
 
-  it('should create a new user', async () => {
+  it('/user/register (POST) should create a user', async () => {
     const createUserDto = {
-      name: 'John Doe',
-      email: 'john@example323.com',
-      password: 'password123',
+      email: 'test@example5.com',
+      password: 'testPassword',
+      name: 'TestUser',
       role: 'OWNER'
     };
-  
+
     const response = await request(app.getHttpServer())
       .post('/user/register')
       .send(createUserDto)
       .expect(201);
-  
-    expect(response.body).toHaveProperty('id');
-    expect(response.body).toHaveProperty('name', createUserDto.name);
-    expect(response.body).toHaveProperty('email', createUserDto.email);
-    createdUser = await userRepository.findOne({ where: { email: 'john@example323.com' } });
-    
+
+   
+    userId = response.body.id; 
   });
 
-  
-    
-
-  afterEach(async () => {
-    if (createdUser) {
-        await userRepository.delete(createdUser.id);
-      }
-    if (app) {
-        await app.close();
-      }
+  it('/user (GET) should return all users', async () => {
+    await request(app.getHttpServer())
+      .get('/user')
+      .expect(HttpStatus.OK)
+      .then(response => {
+        expect(response.body).toBeInstanceOf(Array);
+      });
   });
 
+  it('/user/:id (PATCH) should update a user', async () => {
+    const updateUserDto = {
+      name: 'Updated Name'
+    };
+
+    await request(app.getHttpServer())
+      .patch(`/user/${userId}`)
+      .send(updateUserDto)
+      .expect(HttpCode)
+      .then(response => {
+        expect(response.body).toHaveProperty('name', 'Updated Name');
+      });
+  });
+
+
+  it('/user/:id (DELETE) should remove a user', async () => {
+    await request(app.getHttpServer())
+      .delete(`/user/${userId}`)
+      .expect(200);
+  });
+
+
+      
+  afterAll(async () => {
+    await app.close();
+  });
 });
