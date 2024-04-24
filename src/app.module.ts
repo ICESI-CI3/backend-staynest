@@ -30,7 +30,6 @@ import { CommonModule } from './common/common.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      synchronize: true, 
       autoLoadEntities: true,
       ssl: {
         rejectUnauthorized: false // This is generally not recommended for production unless you fully trust the network and the database.
