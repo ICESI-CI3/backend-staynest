@@ -17,24 +17,6 @@ export class UserService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private users: User[] = [
-    // {
-    //   id: uuid(),
-    //   email: 'juan@juan.com',
-    //   password: '1234',
-    //   name: 'Juan',
-    //   role: Role.OWNER
-
-    // },
-    // {
-    //   id: uuid(),
-    //   email: 'pablo@pablo.com',
-    //   password: '1234',
-    //   name: 'Pablo',
-    //   role: Role.ADMIN 
-    // }
-  ];
-
   async create(createUserDto: CreateUserDto) {
     try {
 
@@ -107,6 +89,20 @@ export class UserService {
   async remove(id: string) {
     const user = await this.findOne( id );
     await this.userRepository.delete(id);
+  }
+
+  async populateWithSeedData(users: User[]) {
+    try {
+      const crypPasswordUers = users.map(user => {
+        return {
+          ...user,
+          password: bcrypt.hashSync(user.password, 10)
+        }
+      })
+      await this.userRepository.save(crypPasswordUers);
+    } catch (error) {
+      this.handleDBErrors(error);
+    }
   }
   private handleDBErrors( error: any ): never {
 
