@@ -1,3 +1,4 @@
+
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { PropertyType } from '../../enums/propertyType.enum';
 import { PaymentMethod } from '../../enums/paymentMethod.enum';
@@ -11,7 +12,6 @@ export class Booking {
 
     @Column('date', {nullable: false})
     check_in: Date;
-
 
     @Column('date', {nullable: false})
     check_out: Date;
