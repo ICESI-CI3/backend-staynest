@@ -48,7 +48,7 @@ describe('UserService', () => {
 
   describe('create', () => {
     it('should successfully create a user', async () => {
-      const createUserDto = { email: 'test@example.com', password: 'testPassword', name: 'Test User', role: Role.USER };
+      const createUserDto = { email: 'test@example.com', password: 'testPassword', name: 'Test User', role: Role.USER, image: '', emailVerified: 'false' };
       const expectedUser = { id: 'uuid', ...createUserDto, password: 'hashedPassword' };
   
       userRepositoryMock.create.mockReturnValue(expectedUser);
@@ -64,9 +64,9 @@ describe('UserService', () => {
     });
   
     it('should throw an error if the user cannot be created', async () => {
-      const createUserDto = { email: 'test@example.com', password: 'testPassword', name: 'Test User', role: Role.USER};
+      const createUserDto = { email: 'test@example.com', password: 'testPassword', name: 'Test User', role: Role.USER, image: '', emailVerified: 'false' };
       userRepositoryMock.create.mockImplementation(() => { throw new Error('Simulated failure'); });
-  
+
       await expect(service.create(createUserDto)).rejects.toThrow();
     });
   });
