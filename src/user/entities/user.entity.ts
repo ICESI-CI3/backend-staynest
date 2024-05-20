@@ -1,31 +1,53 @@
 import { Role } from "../../enums/role.enum";
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn, ValueTransformer } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import { AccountEntity } from "./account.entity";
 
-@Entity('Users')
+
+
+const transformer: Record<"date" | "bigint", ValueTransformer> = {
+    date: {
+      from: (date: string | null) => date && new Date(parseInt(date, 10)),
+      to: (date?: Date) => date?.valueOf().toString(),
+    },
+    bigint: {
+      from: (bigInt: string | null) => bigInt && parseInt(bigInt, 10),
+      to: (bigInt?: number) => bigInt?.toString(),
+    },
+  }
+
+
+
+@Entity({ name: "users" })
 export class User {
+  @PrimaryGeneratedColumn("uuid")
+  id!: string
+ 
+  @Column({ type: "varchar", nullable: true })
+  name!: string | null
+ 
+  @Column({ type: "varchar", nullable: true, unique: true })
+  email!: string | null
+ 
+  @Column({ type: "varchar", nullable: true, transformer: transformer.date })
+  emailVerified!: string | null
     
+  @Column({ type: "varchar", nullable: true })
+  password!: string | null
 
-    @PrimaryGeneratedColumn('uuid')
-    id: string ;
+  @Column({ type: "varchar", nullable: true })
+  image!: string | null
+ 
+  @Column({ type: "varchar", nullable: true })
+  role!: Role | null
+ 
+  @OneToMany(() => AccountEntity, (account) => account.userId)
+  accounts!: AccountEntity[]
 
-    @Column('text', { nullable: false })
-    password: string;
-
-    @Column('text', { unique: true })
-    email: string;
-
-    @Column('text', { nullable: false })
-    name: string;
-
-    @Column('text', { nullable: false })
-    role: Role;
-    
-    @BeforeInsert()
-    checkFieldsBeforeInsert() {
-        this.email = this.email.toLowerCase().trim();
-    }
-
+  @BeforeInsert()
+  checkFieldsBeforeInsert() {
+      this.email = this.email.toLowerCase().trim();
+  }
 }
 
 
