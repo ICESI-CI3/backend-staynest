@@ -18,7 +18,7 @@ const transformer: Record<"date" | "bigint", ValueTransformer> = {
 
 
 
-@Entity({ name: "users" })
+@Entity({ name: "Users" })
 export class User {
   @PrimaryGeneratedColumn("uuid")
   id!: string
