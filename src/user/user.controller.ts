@@ -37,7 +37,7 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
-  @Get(':email')
+  @Get('email/:email')
   findUserByEmail(email: string) {
     return this.userService.findByEmail(email);
   }
