@@ -55,15 +55,17 @@ describe('User Entity', () => {
           email: 'newuser@example.com',
           password: 'password123',
           name: 'New User',
-          role: Role.USER
+          role: Role.USER,
+          image: '', // Add the missing property
+          emailVerified: 'false' // Change the type to string
         };
-    
-        const result = await controller.create(dto); // Usa await para resolver la promesa
 
-            expect(result).toEqual({
-                id: expect.any(String),
-                ...dto
-            });
+        const result = await controller.create(dto); // Use await to resolve the promise
+
+        expect(result).toEqual({
+          id: expect.any(String),
+          ...dto
+        });
 
     
         expect(mockUserService.create).toHaveBeenCalledWith(dto);
