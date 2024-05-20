@@ -11,7 +11,10 @@ export const userSeed: User[] = [
         id: uuid(),
         checkFieldsBeforeInsert: function (): void {
             throw new Error("Function not implemented.");
-        }
+        },
+        emailVerified: "",
+        image: "",
+        accounts: []
     },
     {
         email: 'dylan@dylan.com',
@@ -21,8 +24,10 @@ export const userSeed: User[] = [
         id: uuid(),
         checkFieldsBeforeInsert: function (): void {
             throw new Error("Function not implemented.");
-        }
-
+        },
+        emailVerified: "",
+        image: "",
+        accounts: []
     },
     {
         email: 'sara@sara.com',
@@ -32,7 +37,10 @@ export const userSeed: User[] = [
         id: uuid(),
         checkFieldsBeforeInsert: function (): void {
             throw new Error("Function not implemented.");
-        }
+        },
+        emailVerified: "",
+        image: "",
+        accounts: []
     },
     {
         email: 'admin@admin',
@@ -42,7 +50,10 @@ export const userSeed: User[] = [
         id: uuid(),
         checkFieldsBeforeInsert: function (): void {
             throw new Error("Function not implemented.");
-        }
+        },
+        emailVerified: "",
+        image: "",
+        accounts: []
     },
     {
         email: 'owner@owner.com',
@@ -52,7 +63,10 @@ export const userSeed: User[] = [
         id: uuid(),
         checkFieldsBeforeInsert: function (): void {
             throw new Error("Function not implemented.");
-        }
+        },
+        emailVerified: "",
+        image: "",
+        accounts: []
     },
     {
         email: 'user@user.com',
@@ -62,6 +76,9 @@ export const userSeed: User[] = [
         id: uuid(),
         checkFieldsBeforeInsert: function (): void {
             throw new Error("Function not implemented.");
-        }
+        },
+        emailVerified: "",
+        image: "",
+        accounts: []
     }
 ]

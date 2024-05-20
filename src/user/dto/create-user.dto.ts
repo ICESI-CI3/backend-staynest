@@ -14,6 +14,14 @@ export class CreateUserDto {
     readonly name: string;
 
     @IsString()
+    readonly image: string;
+
+    @IsString()
+    readonly emailVerified: string;
+
+    
+
+    @IsString()
     readonly role: Role;
 
 }

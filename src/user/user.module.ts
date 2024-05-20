@@ -6,6 +6,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { forwardRef } from '@nestjs/common';
+import { AccountEntity } from './entities/account.entity';
 
 
 @Module({
@@ -13,7 +14,7 @@ import { forwardRef } from '@nestjs/common';
   providers: [UserService],
   exports: [UserService, TypeOrmModule],
   imports: [ forwardRef(() => AuthModule),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, AccountEntity]),
   ],
 })
 export class UserModule {}
