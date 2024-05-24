@@ -21,6 +21,7 @@ async function bootstrap() {
       // de un dato o atributo no necesario y que no tengo definido
     })
     );
-  await app.listen(3000);
+  app.enableCors();
+  await app.listen(3001);
 }
 bootstrap();
