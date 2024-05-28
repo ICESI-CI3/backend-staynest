@@ -25,7 +25,7 @@ export class UserController {
     return this.userService.findAll();
   }
   
-  @Roles(Role.OWNER)
+  @Roles(Role.OWNER, Role.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
