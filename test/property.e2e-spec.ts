@@ -66,7 +66,7 @@ describe('PropertyController (e2e)', () => {
             area: 150,
             cost_per_night: 200,
             max_people: 6,
-            slug: 'usa-new-york-123-main-st'
+            slug: 'usa-new-york-123-main-st-142'
         };
     
         const response = await request(app.getHttpServer())
@@ -89,7 +89,7 @@ describe('PropertyController (e2e)', () => {
             area: 150,
             cost_per_night: 200,
             max_people: 6,
-            slug: 'usa-new-york-123-main-st'
+            slug: 'usa-new-york-123-main-st-142'
         });
       });
 
