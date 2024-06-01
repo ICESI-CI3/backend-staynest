@@ -45,11 +45,11 @@ import { redisStore } from 'cache-manager-redis-yet';
       store: redisStore,
       ttl: 60 * 1000 * 60, // Los elementos en caché se borran después de 30 segundos
       isGlobal: true, 
-      password: 'fzxNSdA2GEKX1nhB21ibg0VIzhIkG7h78AzCaG5PaZk=',
+      password: process.env.REDIS_PASSWORD,
       socket: {
         host: 'saynest.redis.cache.windows.net',
         port: 6380,
-        password: 'fzxNSdA2GEKX1nhB21ibg0VIzhIkG7h78AzCaG5PaZk=',
+        password: process.env.REDIS_PASSWORD,
         tls: true
       }
     }),
