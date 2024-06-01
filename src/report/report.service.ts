@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from '../booking/entities/booking.entity';
@@ -6,6 +6,8 @@ import { Property } from '../property/entities/property.entity';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { differenceInDays } from 'date-fns';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+
 @Injectable()
 export class ReportService {
 
@@ -16,10 +18,15 @@ export class ReportService {
     @InjectRepository(Property)
     private propertyRepository: Repository<Property>,
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
   
   async generateOccupancyReport() {
+    const cachedReport = await this.cacheManager.get('occupancyReport');
+    if (cachedReport){
+      return cachedReport
+    }
     console.log('generating report')
     const properties = await this.propertyRepository.find();
     if (!properties.length) {
@@ -64,11 +71,17 @@ export class ReportService {
         slug: property.slug,
       };
     }));
-  
-    return reports.filter(report => report !== null); // Filter out null values from the results
+    const report = reports.filter(report => report !== null); // Filter out null values from the results
+    console.log(report)
+    await this.cacheManager.set('occupancyReport', report)
+    return report 
   }
  
   async generateFinancialReport(): Promise<any> {
+    const cachedReport = await this.cacheManager.get('financialReport');
+    if (cachedReport){
+      return cachedReport
+    }
     const bookings = await this.bookingRepository.find();
     if (!bookings.length) {
       console.log('No bookings found');
@@ -116,11 +129,15 @@ export class ReportService {
 
       return acc;
     }, {});
-
+    await this.cacheManager.set('financialReport', financialReport)
     return financialReport;
   }
   
   async generateRevenueByCityReport(): Promise<any> {
+    const cachedReport = await this.cacheManager.get('revenueByCityReport');
+    if (cachedReport){
+      return cachedReport
+    }
     const bookings = await this.bookingRepository.find();
     const propertyIds = bookings.map(booking => booking.property_id);
     const properties = await this.propertyRepository.findByIds(propertyIds);
@@ -168,11 +185,16 @@ export class ReportService {
 
       return acc;
     }, {});
-
+    await this.cacheManager.set('revenueByCityReport', revenueByCity)
     return revenueByCity;
   }
 
   async generateUserActivityReport(): Promise<any> {
+    const cachedReport = await this.cacheManager.get('userActivityReport');
+    if (cachedReport){
+      return cachedReport
+    }
+
     const bookings = await this.bookingRepository.find();
     if (bookings.length === 0) {
       console.log('No bookings found');
@@ -248,7 +270,7 @@ export class ReportService {
         });
       }
     });
-
+    await this.cacheManager.set('userActivityReport', userActivity)
     return userActivity;
   }
  

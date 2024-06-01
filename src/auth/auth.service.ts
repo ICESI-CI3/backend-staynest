@@ -15,7 +15,7 @@ export class AuthService {
     email: string,
     pass: string,
   ): Promise<{ user: User, access_token: string }> {
-
+    console.log("aqui estoy")
     const user = await this.usersService.findByEmail(email);
     console.log(user)
     

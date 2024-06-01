@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 
 @Injectable()
@@ -15,6 +16,7 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -39,11 +41,22 @@ export class UserService {
 
   }
 
-  findAll() {
-    return this.userRepository.find();
+  async findAll() {
+    const cachedUsers: User[] = await this.cacheManager.get('users');
+    if (cachedUsers){
+      return cachedUsers
+    }
+    const users = await this.userRepository.find();
+    await this.cacheManager.set('users', users)
+    return users;
   }
 
   async findOne(id: string) {
+    const cachedUser: User = await this.cacheManager.get(`user_${id}`);
+    if (cachedUser){
+      return cachedUser
+    }
+
     const user: User = await this.userRepository.findOne({
       where: { id }
     });
@@ -51,12 +64,15 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-
+    await this.cacheManager.set(`user_${id}`, user)
     return user;
   }
   /* istanbul ignore next */
   async findByEmail(email: string) {
-
+    const cachedUser: User = await this.cacheManager.get(`user_${email}`);
+    if (cachedUser){
+      return cachedUser
+    }
     const user: User = await this.userRepository.findOne({
       where: { email }
     });
@@ -64,7 +80,7 @@ export class UserService {
     if (!user) {
         throw new NotFoundException(`User with email ${email} not found`);
     }
-
+   await this.cacheManager.set(`user_${email}`, user)
     return user;
   }
   /* istanbul ignore next */
