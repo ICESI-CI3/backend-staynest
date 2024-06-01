@@ -19,7 +19,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   signIn(@Body() signInDto: Record<string, any>) {
-      
+    console.log("hola")
     return this.authService.signIn(signInDto.email, signInDto.password);
   }
 

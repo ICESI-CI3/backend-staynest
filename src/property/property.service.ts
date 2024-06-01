@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -7,6 +7,7 @@ import { UpdatePropertyDto } from './dto/update-property.dto';
 import { Property } from './entities/property.entity';
 import { isUUID } from 'class-validator';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 @Injectable()
 export class PropertyService {
@@ -15,7 +16,8 @@ export class PropertyService {
   // inyectamos el repositorio en el servicio
   constructor(
     @InjectRepository(Property) 
-    private readonly propertyRepository: Repository<Property>
+    private readonly propertyRepository: Repository<Property>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ){
 
   }
@@ -37,8 +39,14 @@ export class PropertyService {
   // find all - recibimos pagination por parametro
   
   async findAll( ) {
-    // find 
-    return await this.propertyRepository.find();
+    const cachedProperties: Property[] = await this.cacheManager.get('properties');
+    if (cachedProperties){
+      return cachedProperties
+    }
+    // find
+    const properties = await this.propertyRepository.find();
+    await this.cacheManager.set('properties', properties) 
+    return properties;
   }
 
   // find one :  puede buscar por cualquiera de las dos propiedades
@@ -46,7 +54,10 @@ export class PropertyService {
   
   async findOne( term: string ) {
     let property: Property;
-
+    const cachedProperty: Property = await this.cacheManager.get(`property_${term}`);
+    if (cachedProperty){
+      return cachedProperty
+    }
     if ( isUUID(term) ) {
       property = await this.propertyRepository.findOneBy({ id: term });
     } else {
@@ -60,9 +71,11 @@ export class PropertyService {
         }).getOne();
     }
 
-    if ( !property ) 
+    if ( !property ){
       throw new NotFoundException(`Property with ${ term } not found`);
-
+    } 
+      
+    await this.cacheManager.set(`property_${term}`, property)
     return property;
   }
 

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Booking } from './entities/booking.entity';
@@ -7,6 +7,7 @@ import { UpdateBookingDto } from './dto/update-booking.dto';
 import { isUUID } from 'class-validator';
 import { Property } from '../property/entities/property.entity';
 import { User } from '../user/entities/user.entity';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 
 @Injectable()
 export class BookingService {
@@ -18,7 +19,8 @@ export class BookingService {
     @InjectRepository(Property)
     private readonly propertyRepository: Repository<Property>,
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   // verifica la existencia de la propiedad
@@ -53,10 +55,20 @@ export class BookingService {
 
 
   async findAll(): Promise<Booking[]> {
+    const cachedBookings = await this.cacheManager.get('bookings');
+    if (cachedBookings){
+      return cachedBookings as Booking[];
+    }
+    const bookings = await this.bookingRepository.find();
+    await this.cacheManager.set('bookings', bookings);
     return await this.bookingRepository.find();
   }
 
   async findOne(id: string): Promise<Booking> {
+    const cachedBooking = await this.cacheManager.get(`booking_${id}`);
+    if (cachedBooking){
+      return cachedBooking as Booking;
+    }
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid identifier');
     }
@@ -64,6 +76,7 @@ export class BookingService {
     if (!booking) {
       throw new NotFoundException(`Booking with ID "${id}" not found`);
     }
+    await this.cacheManager.set(`booking_${id}`, booking);
     return booking;
   }
 
