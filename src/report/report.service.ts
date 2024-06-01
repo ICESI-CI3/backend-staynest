@@ -63,7 +63,7 @@ export class ReportService {
       }, 0);
   
       const totalAvailableDays = 365 * property.rooms; // Total days available in a year
-      const occupancyRate = (totalBookedDays / totalAvailableDays * 100).toFixed(2) + '%';
+      const occupancyRate = (totalBookedDays / totalAvailableDays * 100).toFixed(2) ;
   
       return {
         propertyId: property.id,
@@ -72,7 +72,8 @@ export class ReportService {
       };
     }));
     const report = reports.filter(report => report !== null); // Filter out null values from the results
-    console.log(report)
+    
+    report.sort((a, b) => parseFloat(b.occupancyRate) - parseFloat(a.occupancyRate));
     await this.cacheManager.set('occupancyReport', report)
     return report 
   }
@@ -129,8 +130,21 @@ export class ReportService {
 
       return acc;
     }, {});
-    await this.cacheManager.set('financialReport', financialReport)
-    return financialReport;
+
+    const financialReportArray = Object.keys(financialReport).map(propertyId => ({
+      propertyId,
+      ...financialReport[propertyId]
+    }));
+    financialReportArray.sort((a, b) => b.earnings - a.earnings);
+
+    const sortedFinancialReport = financialReportArray.reduce((acc, report) => {
+      acc[report.propertyId] = report;
+      delete acc[report.propertyId].propertyId;
+      return acc;
+    }, {});
+
+    await this.cacheManager.set('financialReport', sortedFinancialReport)
+    return sortedFinancialReport;
   }
   
   async generateRevenueByCityReport(): Promise<any> {
@@ -185,8 +199,21 @@ export class ReportService {
 
       return acc;
     }, {});
-    await this.cacheManager.set('revenueByCityReport', revenueByCity)
-    return revenueByCity;
+
+    const revenueByCityArray = Object.keys(revenueByCity).map(city => ({
+      city,
+      ...revenueByCity[city]
+    }));
+    revenueByCityArray.sort((a, b) => b.earnings - a.earnings);
+
+    const sortedRevenueByCity = revenueByCityArray.reduce((acc, report) => {
+      acc[report.city] = report;
+      delete acc[report.city].city;
+      return acc;
+    }, {});
+
+    await this.cacheManager.set('revenueByCityReport', sortedRevenueByCity)
+    return sortedRevenueByCity;
   }
 
   async generateUserActivityReport(): Promise<any> {
@@ -270,8 +297,22 @@ export class ReportService {
         });
       }
     });
-    await this.cacheManager.set('userActivityReport', userActivity)
-    return userActivity;
+
+    const userActivityArray = Object.keys(userActivity).map(userId => ({
+      userId,
+      ...userActivity[userId]
+    }));
+    userActivityArray.sort((a, b) => b.totalSpent - a.totalSpent);
+
+    const sortedUserActivity = userActivityArray.reduce((acc, report) => {
+    acc[report.userId] = report;
+    delete acc[report.userId].userId;
+    return acc;
+    }, {});
+
+
+    await this.cacheManager.set('userActivityReport', sortedUserActivity)
+    return sortedUserActivity;
   }
  
 
