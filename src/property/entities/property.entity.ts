@@ -72,6 +72,11 @@ export class Property {
 
     // before insert hacemos un refactor
     // al slug
+    @Column('text', {
+        nullable: false,
+    })
+    description: string;
+    
     @BeforeInsert()
     checkSlug(): void {
         /* istanbul ignore next */
@@ -84,4 +89,9 @@ export class Property {
 
         this.slug = this.slug.toLowerCase();
     }
+
+    @Column('text', {
+        nullable: false,
+    })
+    image: string;
 }

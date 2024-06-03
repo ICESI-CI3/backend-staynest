@@ -36,7 +36,15 @@ export class CreatePropertyDto {
     readonly max_people: number;
 
     @IsString()
+    readonly description: string;
+
+    @IsString()
     @IsOptional()
     @Length(3, 50)
     readonly slug: string;
+
+    
+    @IsString()
+    @IsOptional()
+    image?: string;
 }

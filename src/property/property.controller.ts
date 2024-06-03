@@ -1,39 +1,40 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, Query } from '@nestjs/common';
+import {Controller,Get,Post,Body,Patch,Param,Delete,ParseUUIDPipe,UseInterceptors,UploadedFile} from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
-//Now that we have a custom @Roles() decorator, we can use it to decorate any route handler.
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { Express } from 'express'; 
+import { Multer } from 'multer'; 
 
-// TO DO: Return Types !!!
 @Controller('property')
 export class PropertyController {
   constructor(private readonly propertyService: PropertyService) {}
 
-  // create a new property
-  @Roles(Role.OWNER)
-  @UseGuards(AuthGuard, RolesGuard)
   @Post()
-  create(@Body() createPropertyDto: CreatePropertyDto) {
-    return this.propertyService.create(createPropertyDto);
+  async create(
+    @Body() createPropertyDto: CreatePropertyDto,
+    @Body('imageBuffer') imageBuffer: Buffer,
+    @Body('imageName') imageName: string,
+    @Body('imageMimeType') imageMimeType: string
+  ) {
+    return this.propertyService.create(createPropertyDto, imageBuffer, imageName, imageMimeType);
   }
 
-  // find all properties
-  // pasamos como parametro el PaginationDto
-  // que indica la cantidad max a mostrar y 
-  // paginacion
+
   @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.propertyService.findAll();
   }
 
-  // find a property with a specific ID
   @UseGuards(AuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {

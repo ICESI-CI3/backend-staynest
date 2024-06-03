@@ -26,7 +26,7 @@ export class SeedService {
       }
     }));
     this.userService.populateWithSeedData(userSeed);
-    this.propertyService.populateWithSeedData(propertySeedWithSlug);
+    //this.propertyService.populateWithSeedData(propertySeedWithSlug);
     this.bookingService.populateWithSeedData(bookingSeed);
     
     return ` Database seeded

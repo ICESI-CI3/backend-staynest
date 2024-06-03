@@ -24,9 +24,11 @@ describe('PropertyController', () => {
       area: 150,
       cost_per_night: 200,
       max_people: 6,
-      slug: 'usa-new-york-123-main-st'
-  },
-  {
+      description: 'A beautiful house in the heart of New York.',
+      slug: 'usa-new-york-123-main-st',
+      image: 'uploads/image-a1.jpg'
+    },
+    {
       id: 'a2',
       type: PropertyType.Apartment,
       country: 'Canada',
@@ -39,9 +41,11 @@ describe('PropertyController', () => {
       area: 100,
       cost_per_night: 150,
       max_people: 4,
-      slug: 'canada-toronto-456-queen-st'
-  },
-  {
+      description: 'A cozy apartment in Toronto.',
+      slug: 'canada-toronto-456-queen-st',
+      image: 'uploads/image-a2.jpg'
+    },
+    {
       id: 'a3',
       type: PropertyType.Chalet,
       country: 'Spain',
@@ -54,39 +58,30 @@ describe('PropertyController', () => {
       area: 200,
       cost_per_night: 300,
       max_people: 8,
-      slug: 'spain-barcelona-789-beach-rd'
-  }
+      description: 'A luxurious chalet near the beach in Barcelona.',
+      slug: 'spain-barcelona-789-beach-rd',
+      image: 'uploads/image-a3.jpg'
+    }
   ];
 
-  // simulamos el servicio
-  // debe haber correspondencia en
-  // nombres del servicio real
-  // y el mock
   const mockPropertyService = {
-    // create property
-    create: jest.fn( (propertyDto) => 
-    ({
+    create: jest.fn((propertyDto, imageBuffer, imageName, imageMimeType) => ({
       id: 'a' + Math.floor(Math.random() * 100),
-      ...propertyDto
-    }) ),
+      ...propertyDto,
+      image: 'https://storage.googleapis.com/bucket-name/' + imageName
+    })),
 
-    // get properties
-    findAll: jest.fn( () => 
-    (
-      properties
-    )),
+    findAll: jest.fn(() => properties),
 
-    // get property (slug o ID)
-    findOne: jest.fn( (term) => {
+    findOne: jest.fn((term) => {
       const byID = properties.find(property => property.id === term);
-  
+
       if (!byID) {
         const bySlug = properties.find(property => property.slug === term);
 
         if (bySlug) {
           return bySlug;
         } else {
-          // Tipo de term no válido
           return "Not found";
         }
       } else {
@@ -94,14 +89,12 @@ describe('PropertyController', () => {
       }
     }),
 
-    // update
-    update: jest.fn( (id, updatePropertyDto) => ({
+    update: jest.fn((id, updatePropertyDto) => ({
       id: id,
       ...updatePropertyDto,
     })),
 
-    // delete
-    remove: jest.fn( (id) => properties.filter(property => !id.includes(property.id)))
+    remove: jest.fn((id) => properties.filter(property => property.id !== id))
   }
 
   beforeEach(async () => {
@@ -110,8 +103,8 @@ describe('PropertyController', () => {
       providers: [PropertyService],
       imports: [AuthModule, AppModule],
     }).overrideProvider(PropertyService)
-    .useValue(mockPropertyService)
-    .compile();;
+      .useValue(mockPropertyService)
+      .compile();
 
     controller = module.get<PropertyController>(PropertyController);
   });
@@ -120,8 +113,7 @@ describe('PropertyController', () => {
     expect(controller).toBeDefined();
   });
 
-  // create property
-  it('should create a property', () => {
+  it('should create a property', async () => {
     const dto = {
       type: PropertyType.Chalet,
       country: 'Colombia',
@@ -134,10 +126,16 @@ describe('PropertyController', () => {
       area: 50,
       cost_per_night: 20,
       max_people: 4,
-      slug: 'colombia-buga-calle-2-sur--15a-69'
+      description: 'A lovely chalet in Buga.',
+      slug: 'colombia-buga-calle-2-sur-15a-69',
+      image:''
     };
 
-    expect(controller.create(dto)).toEqual({
+    const imageBuffer = Buffer.from('some-image-data', 'base64');
+    const imageName = 'image-a4.jpg';
+    const imageMimeType = 'image/jpeg';
+
+    expect(await controller.create(dto, imageBuffer, imageName, imageMimeType)).toEqual({
       id: expect.any(String),
       type: PropertyType.Chalet,
       country: 'Colombia',
@@ -150,156 +148,68 @@ describe('PropertyController', () => {
       area: 50,
       cost_per_night: 20,
       max_people: 4,
-      slug: 'colombia-buga-calle-2-sur--15a-69'
+      description: 'A lovely chalet in Buga.',
+      slug: 'colombia-buga-calle-2-sur-15a-69',
+      image: 'https://storage.googleapis.com/bucket-name/image-a4.jpg'
     });
 
-    expect(mockPropertyService.create).toHaveBeenCalledWith(dto);
+    expect(mockPropertyService.create).toHaveBeenCalledWith(dto, imageBuffer, imageName, imageMimeType);
     expect(mockPropertyService.create).toHaveBeenCalledTimes(1);
   });
 
-  // get a property by ID
-  it('should get a property', () => {
-    expect(controller.findOne('a3')).toEqual(
-      {
-        id: 'a3',
-        type: PropertyType.Chalet,
-        country: 'Spain',
-        city: 'Barcelona',
-        address: '789 Beach Rd',
-        latitude: 41.3851,
-        altitude: 2.1734,
-        rooms: 4,
-        bathrooms: 3,
-        area: 200,
-        cost_per_night: 300,
-        max_people: 8,
-        slug: 'spain-barcelona-789-beach-rd'
-    }
-    );
+  it('should get a property by ID', () => {
+    expect(controller.findOne('a3')).toEqual({
+      id: 'a3',
+      type: PropertyType.Chalet,
+      country: 'Spain',
+      city: 'Barcelona',
+      address: '789 Beach Rd',
+      latitude: 41.3851,
+      altitude: 2.1734,
+      rooms: 4,
+      bathrooms: 3,
+      area: 200,
+      cost_per_night: 300,
+      max_people: 8,
+      description: 'A luxurious chalet near the beach in Barcelona.',
+      slug: 'spain-barcelona-789-beach-rd',
+      image: 'uploads/image-a3.jpg'
+    });
 
     expect(mockPropertyService.findOne).toHaveBeenCalledWith('a3');
     expect(mockPropertyService.findOne).toHaveBeenCalledTimes(1);
   });
 
-  // get a property by slug
-  it('should get a property', () => {
-    expect(controller.findOne('canada-toronto-456-queen-st')).toEqual(
-      {
-        id: 'a2',
-        type: PropertyType.Apartment,
-        country: 'Canada',
-        city: 'Toronto',
-        address: '456 Queen St',
-        latitude: 43.6511,
-        altitude: -79.3470,
-        rooms: 2,
-        bathrooms: 1,
-        area: 100,
-        cost_per_night: 150,
-        max_people: 4,
-        slug: 'canada-toronto-456-queen-st'
-    }
-    );
-
-    expect(mockPropertyService.findOne).toHaveBeenCalledWith('canada-toronto-456-queen-st');
-    expect(mockPropertyService.findOne).toHaveBeenCalledTimes(2);
-  });
-
-  // get all properties
-  it('should get all properties', () => {  
-    const propertiesExp = [
-      {
-        id: 'a1',
-        type: PropertyType.House,
-        country: 'USA',
-        city: 'New York',
-        address: '123 Main St',
-        latitude: 40.7128,
-        altitude: -74.0060,
-        rooms: 3,
-        bathrooms: 2,
-        area: 150,
-        cost_per_night: 200,
-        max_people: 6,
-        slug: 'usa-new-york-123-main-st'
-    },
-    {
-        id: 'a2',
-        type: PropertyType.Apartment,
-        country: 'Canada',
-        city: 'Toronto',
-        address: '456 Queen St',
-        latitude: 43.6511,
-        altitude: -79.3470,
-        rooms: 2,
-        bathrooms: 1,
-        area: 100,
-        cost_per_night: 150,
-        max_people: 4,
-        slug: 'canada-toronto-456-queen-st'
-    },
-    {
-        id: 'a3',
-        type: PropertyType.Chalet,
-        country: 'Spain',
-        city: 'Barcelona',
-        address: '789 Beach Rd',
-        latitude: 41.3851,
-        altitude: 2.1734,
-        rooms: 4,
-        bathrooms: 3,
-        area: 200,
-        cost_per_night: 300,
-        max_people: 8,
-        slug: 'spain-barcelona-789-beach-rd'
-    },
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    {
-      id: expect.any(String),
-      type: PropertyType.Chalet,
-      country: 'Colombia',
-      city: 'Buga',
-      address: 'Calle 2 sur #15A-69',
-      latitude: 30.41,
-      altitude: 132.145,
+  it('should get a property by slug', () => {
+    expect(controller.findOne('canada-toronto-456-queen-st')).toEqual({
+      id: 'a2',
+      type: PropertyType.Apartment,
+      country: 'Canada',
+      city: 'Toronto',
+      address: '456 Queen St',
+      latitude: 43.6511,
+      altitude: -79.3470,
       rooms: 2,
       bathrooms: 1,
-      area: 50,
-      cost_per_night: 20,
+      area: 100,
+      cost_per_night: 150,
       max_people: 4,
-      slug: 'colombia-buga-calle-2-sur-#15a-69'
-    },
+      description: 'A cozy apartment in Toronto.',
+      slug: 'canada-toronto-456-queen-st',
+      image: 'uploads/image-a2.jpg'
+    });
 
-    ]
-
-    expect(controller.findAll()).toEqual(propertiesExp);
-
-    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
-
+    expect(mockPropertyService.findOne).toHaveBeenCalledWith('canada-toronto-456-queen-st');
+    expect(mockPropertyService.findOne).toHaveBeenCalledTimes(1);
   });
 
-  // update
-  it('should update a property', () => {  
-    const editedProperty = 
-      {
-        id: 'a1',
-        type: PropertyType.House,
-        country: 'Edited USA',
-        city: 'New York',
-        address: '123 Main St',
-        latitude: 40.7128,
-        altitude: -74.0060,
-        rooms: 3,
-        bathrooms: 2,
-        area: 150,
-        cost_per_night: 200,
-        max_people: 6,
-        slug: 'usa-new-york-123-main-st'
-    }
+  it('should get all properties', () => {
+    expect(controller.findAll()).toEqual(properties);
+    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
+  });
 
-    expect(controller.update('a1', {
+  it('should update a property', () => {
+    const editedProperty = {
       id: 'a1',
       type: PropertyType.House,
       country: 'Edited USA',
@@ -312,76 +222,13 @@ describe('PropertyController', () => {
       area: 150,
       cost_per_night: 200,
       max_people: 6,
-      slug: 'usa-new-york-123-main-st'
-  })).toEqual(editedProperty);
-
-    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
-    expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
-  });
-
-  // delete
-  it('should delete a property', () => {
-    const propertiesAfterRemove = [
-    {
-        id: 'a2',
-        type: PropertyType.Apartment,
-        country: 'Canada',
-        city: 'Toronto',
-        address: '456 Queen St',
-        latitude: 43.6511,
-        altitude: -79.3470,
-        rooms: 2,
-        bathrooms: 1,
-        area: 100,
-        cost_per_night: 150,
-        max_people: 4,
-        slug: 'canada-toronto-456-queen-st'
-    },
-    {
-        id: 'a3',
-        type: PropertyType.Chalet,
-        country: 'Spain',
-        city: 'Barcelona',
-        address: '789 Beach Rd',
-        latitude: 41.3851,
-        altitude: 2.1734,
-        rooms: 4,
-        bathrooms: 3,
-        area: 200,
-        cost_per_night: 300,
-        max_people: 8,
-        slug: 'spain-barcelona-789-beach-rd'
-    }
-    
-    ]
-
-    expect(controller.remove('a1')).toEqual(propertiesAfterRemove);
-
-    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
-
-  });
-
-  // update
-  it('should update a property', () => {  
-    const editedProperty = 
-      {
-        id: 'a1',
-        type: PropertyType.House,
-        country: 'Edited USA',
-        city: 'New York',
-        address: '123 Main St',
-        latitude: 40.7128,
-        altitude: -74.0060,
-        rooms: 3,
-        bathrooms: 2,
-        area: 150,
-        cost_per_night: 200,
-        max_people: 6,
-        slug: 'usa-new-york-123-main-st'
-    }
+      description: 'An updated beautiful house in New York.',
+      slug: 'usa-new-york-123-main-st',
+      image: 'uploads/image-a1.jpg'
+    };
 
     expect(controller.update('a1', {
-      id: 'a1',
+      id:'a1',
       type: PropertyType.House,
       country: 'Edited USA',
       city: 'New York',
@@ -393,17 +240,33 @@ describe('PropertyController', () => {
       area: 150,
       cost_per_night: 200,
       max_people: 6,
-      slug: 'usa-new-york-123-main-st'
-  })).toEqual(editedProperty);
+      description: 'An updated beautiful house in New York.',
+      slug: 'usa-new-york-123-main-st',
+      image: 'uploads/image-a1.jpg'
+    })).toEqual(editedProperty);
 
-    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
-    expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
+    expect(mockPropertyService.update).toHaveBeenCalledWith('a1', {
+      type: PropertyType.House,
+      country: 'Edited USA',
+      city: 'New York',
+      address: '123 Main St',
+      latitude: 40.7128,
+      altitude: -74.0060,
+      rooms: 3,
+      bathrooms: 2,
+      area: 150,
+      cost_per_night: 200,
+      max_people: 6,
+      description: 'An updated beautiful house in New York.',
+      slug: 'usa-new-york-123-main-st',
+      image: 'uploads/image-a1.jpg'
+    });
+    expect(mockPropertyService.update).toHaveBeenCalledTimes(1);
   });
 
-  // delete
   it('should delete a property', () => {
     const propertiesAfterRemove = [
-    {
+      {
         id: 'a2',
         type: PropertyType.Apartment,
         country: 'Canada',
@@ -416,9 +279,11 @@ describe('PropertyController', () => {
         area: 100,
         cost_per_night: 150,
         max_people: 4,
-        slug: 'canada-toronto-456-queen-st'
-    },
-    {
+        description: 'A cozy apartment in Toronto.',
+        slug: 'canada-toronto-456-queen-st',
+        image: 'uploads/image-a2.jpg'
+      },
+      {
         id: 'a3',
         type: PropertyType.Chalet,
         country: 'Spain',
@@ -431,14 +296,15 @@ describe('PropertyController', () => {
         area: 200,
         cost_per_night: 300,
         max_people: 8,
-        slug: 'spain-barcelona-789-beach-rd'
-    }
-    
-    ]
+        description: 'A luxurious chalet near the beach in Barcelona.',
+        slug: 'spain-barcelona-789-beach-rd',
+        image: 'uploads/image-a3.jpg'
+      }
+    ];
 
     expect(controller.remove('a1')).toEqual(propertiesAfterRemove);
 
-    expect(mockPropertyService.findAll).toHaveBeenCalledWith();
-    expect(mockPropertyService.findAll).toHaveBeenCalledTimes(1);
+    expect(mockPropertyService.remove).toHaveBeenCalledWith('a1');
+    expect(mockPropertyService.remove).toHaveBeenCalledTimes(1);
   });
 });
