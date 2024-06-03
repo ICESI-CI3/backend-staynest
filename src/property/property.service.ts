@@ -110,6 +110,7 @@ export class PropertyService {
     } catch (error) {
       this.handleDBExceptions(error);
     }
+<<<<<<< HEAD
   }
   
   async populateWithSeedData(property: Property[]){
@@ -118,6 +119,8 @@ export class PropertyService {
     } catch (error) {
       this.handleDBExceptions(error);
     }
+=======
+>>>>>>> 66778c5 (feat (Property): Add service.spec unit tests)
   }
 
   // manejamos la excepciones de la base de datos
