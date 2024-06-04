@@ -7,6 +7,9 @@ export class CreateBookingDto {
   @IsString()
   readonly check_in: Date;
 
+  @IsUUID()
+  readonly user_id: string; // Campo para recibir el ID del usuario asociado
+  
   @IsString()
   readonly check_out: Date;
 
@@ -15,10 +18,7 @@ export class CreateBookingDto {
 
   @IsString()
   readonly property_id: string; 
-
-  @IsUUID()
-  readonly user_id: string; 
-
+  
   @IsNumber()
   readonly num_people: number;
 

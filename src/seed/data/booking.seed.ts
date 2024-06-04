@@ -19,11 +19,11 @@ export const bookingSeed: Booking[] = [
         })(),
         property_type: PropertyType.Apartment,
         property_id: propertySeed[0].id,
-        user_id: userSeed[0].id,
         num_people: 2,
         payment_method: PaymentMethod.Credit_card,
         is_paid: true,
         is_confirmed: true,
+        user_id: userSeed[0].id
     },
     {
         id: uuid(),
@@ -35,11 +35,11 @@ export const bookingSeed: Booking[] = [
         })(),
         property_type: PropertyType.House,
         property_id: propertySeed[1].id,
-        user_id: userSeed[1].id,
         num_people: 3,
         payment_method: PaymentMethod.Credit_card,
         is_paid: false,
         is_confirmed: true,
+        user_id: userSeed[1].id
     },
     {
         id: uuid(),
@@ -51,11 +51,11 @@ export const bookingSeed: Booking[] = [
         })(),
         property_type: PropertyType.Apartment,
         property_id: propertySeed[2].id,
-        user_id: userSeed[2].id,
         num_people: 4,
         payment_method: PaymentMethod.Credit_card,
         is_paid: false,
         is_confirmed: false,
+        user_id: userSeed[0].id
     },
     {
         id: uuid(),
@@ -67,11 +67,11 @@ export const bookingSeed: Booking[] = [
         })(),
         property_type: PropertyType.House,
         property_id: propertySeed[3].id,
-        user_id: userSeed[3].id,
         num_people: 2,
         payment_method: PaymentMethod.Credit_card,
         is_paid: true,
         is_confirmed: false,
+        user_id: userSeed[4].id
     },
     {
         id: uuid(),
@@ -83,11 +83,11 @@ export const bookingSeed: Booking[] = [
         })(),
         property_type: PropertyType.Apartment,
         property_id: propertySeed[4].id,
-        user_id: userSeed[4].id,
         num_people: 3,
         payment_method: PaymentMethod.Credit_card,
         is_paid: false,
         is_confirmed: true,
+        user_id: userSeed[3].id
     },
     {
         id: uuid(),
@@ -99,10 +99,10 @@ export const bookingSeed: Booking[] = [
         })(),
         property_type: PropertyType.House,
         property_id: propertySeed[5].id,
-        user_id: userSeed[5].id,
         num_people: 2,
         payment_method: PaymentMethod.Credit_card,
         is_paid: true,
         is_confirmed: true,
+        user_id: userSeed[1].id
     }
 ]

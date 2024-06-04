@@ -1,6 +1,7 @@
 import { PropertyType } from '../../enums/propertyType.enum';
 import { Role } from "src/enums/role.enum";
 import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity('Property')
 // clase Property
@@ -8,6 +9,10 @@ export class Property {
     // primary key auto generada - tipo de auto gen
     @PrimaryGeneratedColumn('uuid')
     id: string;
+
+    // Define la relación con User
+    @Column('uuid', {nullable: false})
+    user_id: string; // Cambio en el tipo de datos
 
     @Column('text', {
         nullable: false,   

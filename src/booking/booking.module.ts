@@ -9,14 +9,16 @@ import { Booking } from './entities/booking.entity';
 import { UserModule } from 'src/user/user.module';
 import { User } from '../user/entities/user.entity';
 import { Property } from '../property/entities/property.entity';
+import { UserService } from 'src/user/user.service';
 
 @Module({
   controllers: [BookingController],
-  providers: [BookingService],
+  providers: [BookingService, UserService],
   exports: [BookingService, TypeOrmModule],
   imports: [
     forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([Booking, User, Property]),
+    forwardRef(() => UserModule), // Utiliza forwardRef para referenciar a PropertyModule
   ]
 
 })

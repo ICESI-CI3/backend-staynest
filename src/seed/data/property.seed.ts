@@ -1,6 +1,7 @@
 import  {v4 as uuid} from 'uuid';
 import { Property } from "src/property/entities/property.entity";
 import { PropertyType } from '../../enums/propertyType.enum';
+import { userSeed } from './user.seed';
 
 export const propertySeed = [
     {
@@ -17,6 +18,7 @@ export const propertySeed = [
         cost_per_night: 150,
         max_people: 8,
         slug: 'usa-new-york-123-main-st',
+        user_id: userSeed[0].id
       },
       {
         id: uuid(),
@@ -32,6 +34,7 @@ export const propertySeed = [
         cost_per_night: 100,
         max_people: 4,
         slug: 'canada-toronto-456-elm-st',
+        user_id: userSeed[0].id
       },
       {
         id: uuid(),
@@ -47,6 +50,7 @@ export const propertySeed = [
         cost_per_night: 200,
         max_people: 10,
         slug: 'spain-barcelona-789-oak-st',
+        user_id: userSeed[0].id
       },
       {
         id: uuid(),
@@ -62,6 +66,7 @@ export const propertySeed = [
         cost_per_night: 160,
         max_people: 8,
         slug: 'uk-london-202-cedar-st',
+        user_id: userSeed[3].id
       },
       {
         id: uuid(),
@@ -77,6 +82,7 @@ export const propertySeed = [
         cost_per_night: 120,
         max_people: 4,
         slug: 'germany-berlin-303-birch-st',
+        user_id: userSeed[2].id
       },
       {
         id: uuid(),
@@ -92,5 +98,6 @@ export const propertySeed = [
         cost_per_night: 220,
         max_people: 6,
         slug: 'switzerland-zurich-404-pine-st',
+        user_id: userSeed[1].id
       },
 ]

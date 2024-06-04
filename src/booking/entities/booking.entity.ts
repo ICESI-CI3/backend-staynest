@@ -1,14 +1,17 @@
 
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { PropertyType } from '../../enums/propertyType.enum';
 import { PaymentMethod } from '../../enums/paymentMethod.enum';
-
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
 
 @Entity('Booking')
 export class Booking {
 
     @PrimaryGeneratedColumn('uuid')
     id: string;
+
+    @Column('uuid', {nullable: false})
+    user_id: string; // Cambio en el tipo de datos
 
     @Column('date', {nullable: false})
     check_in: Date;
@@ -21,9 +24,6 @@ export class Booking {
 
     @Column('uuid', {nullable: false})
     property_id: string;
-
-    @Column('uuid', {nullable: false})
-    user_id: string;
 
     @Column('numeric', {nullable: false})
     num_people: number;

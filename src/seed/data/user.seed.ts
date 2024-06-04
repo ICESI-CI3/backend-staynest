@@ -4,7 +4,7 @@ import  {v4 as uuid} from 'uuid';
 
 export const userSeed: User[] = [
     {
-        email: 'juan@juan.com',
+        email: 'r1@juan.com',
         name: 'Juan',
         password: 'juan123',
         role: Role.OWNER,
@@ -14,10 +14,12 @@ export const userSeed: User[] = [
         },
         emailVerified: "",
         image: "",
-        accounts: []
+        accounts: [],
+        bookings: [],
+        properties: []
     },
     {
-        email: 'dylan@dylan.com',
+        email: 'r1@dylan.com',
         name: 'Dylan',
         password: 'dylan123',
         role: Role.ADMIN,
@@ -27,10 +29,12 @@ export const userSeed: User[] = [
         },
         emailVerified: "",
         image: "",
-        accounts: []
+        accounts: [],
+        bookings: [],
+        properties: []
     },
     {
-        email: 'sara@sara.com',
+        email: 'r1@sara.com',
         name: 'Sara',
         password: 'sara123',
         role: Role.USER,
@@ -40,10 +44,12 @@ export const userSeed: User[] = [
         },
         emailVerified: "",
         image: "",
-        accounts: []
+        accounts: [],
+        bookings: [],
+        properties: []
     },
     {
-        email: 'admin@admin',
+        email: 'r1@admin',
         name: 'Admin',
         password: 'admin123',
         role: Role.ADMIN,
@@ -53,10 +59,12 @@ export const userSeed: User[] = [
         },
         emailVerified: "",
         image: "",
-        accounts: []
+        accounts: [],
+        bookings: [],
+        properties: []
     },
     {
-        email: 'owner@owner.com',
+        email: 'r1@owner.com',
         name: 'Owner',
         password: 'owner123',
         role: Role.OWNER,
@@ -66,10 +74,12 @@ export const userSeed: User[] = [
         },
         emailVerified: "",
         image: "",
-        accounts: []
+        accounts: [],
+        bookings: [],
+        properties: []
     },
     {
-        email: 'user@user.com',
+        email: 'r1@user.com',
         name: 'User',
         password: 'user123',
         role: Role.USER,
@@ -79,6 +89,8 @@ export const userSeed: User[] = [
         },
         emailVerified: "",
         image: "",
-        accounts: []
+        accounts: [],
+        bookings: [],
+        properties: []
     }
 ]

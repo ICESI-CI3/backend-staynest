@@ -30,6 +30,7 @@ import { redisStore } from 'cache-manager-redis-yet';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
+      migrations: ['src/migrations/*{.ts,.js}'],
       ssl: {
         rejectUnauthorized: false // This is generally not recommended for production unless you fully trust the network and the database.
       },

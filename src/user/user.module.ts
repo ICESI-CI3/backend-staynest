@@ -1,20 +1,23 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { AuthModule } from '../auth/auth.module';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { forwardRef } from '@nestjs/common';
 import { AccountEntity } from './entities/account.entity';
+import { BookingModule } from '../booking/booking.module';
+import { PropertyModule } from 'src/property/property.module';
 
 
 @Module({
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService, TypeOrmModule],
-  imports: [ forwardRef(() => AuthModule),
+  imports: [
+    forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([User, AccountEntity]),
+    BookingModule,
+    forwardRef(() => PropertyModule), // Utiliza forwardRef para referenciar a PropertyModule
   ],
 })
 export class UserModule {}

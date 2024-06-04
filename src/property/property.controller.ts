@@ -1,15 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  ParseUUIDPipe,
-  UseInterceptors,
-  UploadedFile,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseInterceptors, UploadedFile, HttpException, HttpStatus } from '@nestjs/common';
 import { PropertyService } from './property.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
@@ -24,12 +13,14 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { Express } from 'express';
 import { FirebaseService } from './firebase.service';
+import { UserService } from '../user/user.service'; // Importa el servicio de User
 
 @Controller('property')
 export class PropertyController {
   constructor(
     private readonly propertyService: PropertyService,
     private readonly firebaseService: FirebaseService,
+    private readonly userService: UserService, // Inyecta el servicio de User
   ) {}
 
   @Post()
@@ -38,8 +29,17 @@ export class PropertyController {
     @Body() createPropertyDto: CreatePropertyDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    // Verifica si el ID de usuario es válido y existe
+    const user = await this.userService.findOne(createPropertyDto.user_id);
+    if (!user) {
+      throw new HttpException('Invalid or non-existent user ID', HttpStatus.BAD_REQUEST);
+    }
+
+    // Sube la imagen a Firebase y obtiene la URL
     const url = await this.firebaseService.uploadFile(file);
-    createPropertyDto.imageUrl = url;  // Assuming you have imageUrl field in your DTO
+    createPropertyDto.imageUrl = url;  // Asigna la URL de la imagen al DTO
+
+    // Crea la propiedad
     return this.propertyService.create(createPropertyDto);
   }
 

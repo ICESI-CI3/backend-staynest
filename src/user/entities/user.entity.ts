@@ -2,7 +2,8 @@ import { Role } from "../../enums/role.enum";
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn, ValueTransformer } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { AccountEntity } from "./account.entity";
-
+import { Property } from "src/property/entities/property.entity";
+import { Booking } from "src/booking/entities/booking.entity";
 
 
 const transformer: Record<"date" | "bigint", ValueTransformer> = {
@@ -23,6 +24,14 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id!: string
  
+  // Define la relación con Property
+  @OneToMany(() => Property, property => property.user_id) // Indica que User puede tener muchas Property
+  properties: Property[];
+
+  // Define la relación con Booking
+  @OneToMany(() => Booking, booking => booking.user_id) // Indica que User puede tener muchas Booking
+  bookings: Booking[];
+
   @Column({ type: "varchar", nullable: true })
   name!: string | null
  

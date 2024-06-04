@@ -19,6 +19,10 @@ export class UserService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
+  async getProperties(id: string) {
+    
+  }
+
   async create(createUserDto: CreateUserDto) {
     try {
 

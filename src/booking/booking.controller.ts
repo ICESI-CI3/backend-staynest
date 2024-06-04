@@ -1,23 +1,31 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { BookingService } from './booking.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
-//Now that we have a custom @Roles() decorator, we can use it to decorate any route handler.
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../enums/role.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
-
+import { UserService } from '../user/user.service'; // Importa el servicio de User
 
 @Controller('booking')
 export class BookingController {
-  constructor(private readonly bookingService: BookingService) {}
+  constructor(
+    private readonly bookingService: BookingService,
+    private readonly userService: UserService, // Inyecta el servicio de User
+  ) {}
 
   @Roles(Role.OWNER, Role.USER)
   @UseGuards(AuthGuard, RolesGuard)
   @Post()
-  create(@Body() createBookingDto: CreateBookingDto) {
+  async create(@Body() createBookingDto: CreateBookingDto) {
+    // Verifica si el ID de usuario es válido y existe
+    const user = await this.userService.findOne(createBookingDto.user_id);
+    if (!user) {
+      throw new HttpException('Invalid or non-existent user ID', HttpStatus.BAD_REQUEST);
+    }
+
     return this.bookingService.create(createBookingDto);
   }
 
@@ -33,7 +41,6 @@ export class BookingController {
     return this.bookingService.update(id, updateBookingDto);
   }
 
-  
   @UseGuards(AuthGuard) 
   @Delete(':id')
   remove(@Param('id') id: string) {
