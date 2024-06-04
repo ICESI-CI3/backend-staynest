@@ -13,7 +13,7 @@ import { UserService } from 'src/user/user.service';
 
 @Module({
   controllers: [BookingController],
-  providers: [BookingService, UserService],
+  providers: [BookingService],
   exports: [BookingService, TypeOrmModule],
   imports: [
     forwardRef(() => AuthModule),

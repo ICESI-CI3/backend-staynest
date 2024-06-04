@@ -9,15 +9,17 @@ import { forwardRef } from '@nestjs/common';
 import { FirebaseService } from './firebase.service';
 import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
-
+import { BookingService } from 'src/booking/booking.service';
+import { BookingModule } from 'src/booking/booking.module';
 @Module({
   controllers: [PropertyController],
-  providers: [PropertyService, FirebaseService, UserService],
+  providers: [PropertyService, FirebaseService, UserService, BookingService],
   exports: [PropertyService, TypeOrmModule],
   imports: [
     forwardRef(() => AuthModule),
     TypeOrmModule.forFeature([Property]),
-    forwardRef(() => UserModule), // Utiliza forwardRef para referenciar a PropertyModule
+    forwardRef(() => UserModule), 
+    forwardRef(() => BookingModule), 
   ],
 })
 export class PropertyModule {}
