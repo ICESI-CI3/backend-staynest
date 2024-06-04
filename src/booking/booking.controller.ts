@@ -14,11 +14,17 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 export class BookingController {
   constructor(private readonly bookingService: BookingService) {}
 
-  @Roles(Role.OWNER, Role.USER)
+  @Roles(Role.ADMIN, Role.OWNER, Role.USER)
   @UseGuards(AuthGuard, RolesGuard)
   @Post()
   create(@Body() createBookingDto: CreateBookingDto) {
     return this.bookingService.create(createBookingDto);
+  }
+  
+  @UseGuards(AuthGuard)
+  @Get()
+  findAll(){
+    return this.bookingService.findAll();
   }
 
   @UseGuards(AuthGuard)
