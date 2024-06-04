@@ -59,6 +59,16 @@ export class UserController {
     return user;
   }
 
+  @Get(':id/properties')
+  async getProperties(@Param('id') userId: string) {
+    return this.userService.getProperties(userId);
+  }
+
+  @Get(':id/bookings')
+  async getBookings(@Param('id') userId: string) {
+    return this.userService.getBookigs(userId);
+  }
+
   // Añadir propiedad al usuario
   @Post(':id/add-property')
   async addProperty(@Param('id') userId: string, @Body() addPropertyDto: { propertyId: string }) {

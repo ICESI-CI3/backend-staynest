@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
+import { PropertyService } from 'src/property/property.service';
+import { BookingService } from 'src/booking/booking.service';
 
 
 @Injectable()
@@ -16,11 +18,21 @@ export class UserService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
+    private readonly propService: PropertyService,
+    private readonly bookService: BookingService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   async getProperties(id: string) {
-    
+    var properties = this.propService.findAll();
+
+    return (await properties).filter((element) => element.user_id == id);
+  }
+
+  async getBookigs(id: string) {
+    var bookings = this.bookService.findAll();
+
+    return (await bookings).filter((element) => element.user_id == id);
   }
 
   async create(createUserDto: CreateUserDto) {
