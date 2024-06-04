@@ -20,10 +20,8 @@ import { redisStore } from 'cache-manager-redis-yet';
 @Module({
   imports: [
     ConfigModule.forRoot({
-    isGlobal: true,
-
+      isGlobal: true,
     }),
-
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -37,41 +35,37 @@ import { redisStore } from 'cache-manager-redis-yet';
       },
       logger: 'advanced-console',
       logging: 'all',
-      
-      
-      
     }),
     CacheModule.register({
       store: redisStore,
       ttl: 60 * 1000 * 60, // Los elementos en caché se borran después de 30 segundos
       isGlobal: true, 
-      password: 'fzxNSdA2GEKX1nhB21ibg0VIzhIkG7h78AzCaG5PaZk=',
+      password: process.env.REDIS_PASSWORD,
       socket: {
         host: 'saynest.redis.cache.windows.net',
         port: 6380,
-        password: 'fzxNSdA2GEKX1nhB21ibg0VIzhIkG7h78AzCaG5PaZk=',
+        password: process.env.REDIS_PASSWORD,
         tls: true
       }
     }),
-
     PropertyModule,
     BookingModule,
     UserModule,
     AuthModule,
     ReportModule,
-    CommonModule,SeedModule
-    ],
+    CommonModule,
+    SeedModule
+  ],
   controllers: [AppController],
-  providers: [AppService, 
-    AuthGuard,{
+  providers: [
+    AppService, 
+    AuthGuard,
+    {
       provide: 'APP_INTERCEPTOR', // Aqui estamos definiendo que el interceptor de cache
       useClass: CacheInterceptor, // se aplique a todas las rutas de nuestra aplicación OJO solo metodo GET
       // La key de los datos en caché se generará a partir de la URL de la solicitud.
-    }],
+    }
+  ],
   exports: [TypeOrmModule]
 })
-
-
-export class AppModule  {
-  
-}
+export class AppModule {}

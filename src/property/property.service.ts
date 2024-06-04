@@ -7,7 +7,6 @@ import { Property } from './entities/property.entity';
 import { isUUID } from 'class-validator';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
-import {bucket} from './firebase-admin';
 
 @Injectable()
 export class PropertyService {
@@ -24,11 +23,7 @@ export class PropertyService {
   
   // create new property - recibimos DTO
   // TO DO: Crear una Location cada vez que se agregue !!!
-  async create(createPropertyDto: CreatePropertyDto, imageBuffer: Buffer, imageName: string, imageMimeType: string) {
-    if(imageBuffer && imageName && imageMimeType){
-      const uploadedImageUrl = await this.uploadImageToFirebase(imageBuffer, imageName, imageMimeType);
-      createPropertyDto.image = uploadedImageUrl;
-    }
+  async create(createPropertyDto: CreatePropertyDto) {
     try{
       const property = this.propertyRepository.create(createPropertyDto);
 
@@ -40,30 +35,6 @@ export class PropertyService {
     }
   }
 
-  // find all - recibimos pagination por parametro
-  private async uploadImageToFirebase(imageBuffer: Buffer, imageName: string, imageMimeType: string): Promise<string> {
-    const fileName = `${Date.now()}_${imageName}`;
-    const fileUpload = bucket.file(fileName);
-
-    return new Promise((resolve, reject) => {
-      const blobStream = fileUpload.createWriteStream({
-        metadata: {
-          contentType: imageMimeType
-        }
-      });
-
-      blobStream.on('error', (error) => {
-        reject(new InternalServerErrorException('Error uploading file'));
-      });
-
-      blobStream.on('finish', async () => {
-        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`;
-        resolve(publicUrl);
-      });
-
-      blobStream.end(imageBuffer);
-    });
-  }
   async findAll( ) {
     const cachedProperties: Property[] = await this.cacheManager.get('properties');
     if (cachedProperties){

@@ -2,8 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { ValidationPipe } from '@nestjs/common';
-/* istanbul ignore next */
+import * as dotenv from 'dotenv';
+
 async function bootstrap() {
+  dotenv.config();
   /* istanbul ignore next */
   console.log("Hey you");
   console.log(process.env.DB_HOST);

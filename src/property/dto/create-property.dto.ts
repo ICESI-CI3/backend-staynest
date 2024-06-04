@@ -46,5 +46,5 @@ export class CreatePropertyDto {
     
     @IsString()
     @IsOptional()
-    image?: string;
+    imageUrl?: string;
 }
