@@ -64,6 +64,8 @@ export class Property {
     })
     max_people: number; // max gente que puede alojar
 
+    @Column('text', {nullable: true})
+    image: string;
     // El SLUG LO QUE HACE ES "CAMUFLAR" U OCULTAR METADATOS DE LOS DATOS COMO POR EJEMPLO EL ID EN LA URL !!!!
     // ARMAMOS UNA EQUIVALENCIA, UN MAPEO CON EL SLUG (palabra o palabras camufladas) CON EL ENDPOINT REAL
     @Column('text', 

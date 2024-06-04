@@ -43,7 +43,7 @@ import { redisStore } from 'cache-manager-redis-yet';
     }),
     CacheModule.register({
       store: redisStore,
-      ttl: 60 * 1000 * 60, // Los elementos en caché se borran después de 30 segundos
+      ttl: 30 * 1000 , // Los elementos en caché se borran después de 30 segundos
       isGlobal: true, 
       password: 'fzxNSdA2GEKX1nhB21ibg0VIzhIkG7h78AzCaG5PaZk=',
       socket: {
