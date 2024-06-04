@@ -26,11 +26,11 @@ export class User {
  
   // Define la relación con Property
   @OneToMany(() => Property, property => property.user_id) // Indica que User puede tener muchas Property
-  properties: Property[];
+  properties: Property;
 
   // Define la relación con Booking
   @OneToMany(() => Booking, booking => booking.user_id) // Indica que User puede tener muchas Booking
-  bookings: Booking[];
+  bookings: Booking;
 
   @Column({ type: "varchar", nullable: true })
   name!: string | null

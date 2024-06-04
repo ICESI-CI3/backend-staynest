@@ -53,7 +53,7 @@ export class UserController {
       throw new HttpException('Booking not found', HttpStatus.NOT_FOUND);
     }
 
-    user.bookings.push(booking);
+    user.bookings = booking;
     await this.userService.update(userId, user);
 
     return user;
@@ -82,7 +82,7 @@ export class UserController {
       throw new HttpException('Property not found', HttpStatus.NOT_FOUND);
     }
 
-    user.properties.push(property);
+    user.properties = property
     await this.userService.update(userId, user);
 
     return user;
