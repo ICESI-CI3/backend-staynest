@@ -58,3 +58,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 /pgadmin
 
 /src/property/config/firebase-service.json
+
+# Ignore Firebase service account key
+serviceAccountKey.json
