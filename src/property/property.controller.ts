@@ -48,8 +48,8 @@ export class PropertyController {
     return this.propertyService.update(id, updatePropertyDto);
   }
 
-  @Roles(Role.OWNER)
-  @UseGuards(AuthGuard, RolesGuard)
+  
+  @UseGuards(AuthGuard)
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertyService.remove(id);
