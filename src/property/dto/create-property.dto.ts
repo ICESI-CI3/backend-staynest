@@ -1,8 +1,11 @@
-import { IsNumber, IsString, IsOptional, Length } from "class-validator";
+import { IsNumber,  IsUUID, IsString, IsOptional, Length } from "class-validator";
 
 export class CreatePropertyDto {
     @IsString()
     readonly type: string;
+
+    @IsUUID()
+    readonly user_id: string; 
 
     @IsString()
     readonly country: string;

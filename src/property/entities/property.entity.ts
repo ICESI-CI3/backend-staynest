@@ -19,6 +19,9 @@ export class Property {
     })
     country: string;
 
+    @Column('uuid', {nullable: false})
+    user_id: string;
+
     @Column('text', {
         nullable: false,
     })
